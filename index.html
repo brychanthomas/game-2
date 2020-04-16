@@ -16,7 +16,7 @@ var config = {
     default: 'matter',
     matter: {
       debug: true,
-      gravity: {x: 0, y:0}
+      gravity: {x:0, y:0}
     }
   },
   scene: {
@@ -28,16 +28,61 @@ var config = {
 
 var game = new Phaser.Game(config);
 
+//---------Code for inventory-----------
+class InventorySlot {
+  constructor (x, y, image, game) {
+    this.imageObject = game.add.image(x, y, image);
+    this.imageObject.setScale(0.8);
+    this.imageObject.visible = false;
+    this.contents = null;
+  }
+  toggleVisibility () {
+    this.imageObject.visible = !this.imageObject.visible;
+  }
+}
+
+class Inventory {
+  constructor(rows, columns, game) {
+    this.imageObject = game.add.image(500, 300, 'inventoryBack');
+    this.imageObject.visible = false;
+    this.imageObject.setScale(0.8);
+    let leftSide = 500 - (this.imageObject.width/2.5);
+    let topSide = 300 - (this.imageObject.height/2.5);
+    console.log(leftSide, topSide);
+    let xInterval = this.imageObject.width / (1.1*columns+2);
+    let yInterval = this.imageObject.height / (1.1*rows+2);
+    this.slots = [];
+    for (let row = 1; row <= rows; row++) {
+      for (let column = 1; column <= columns; column++) {
+        let x = leftSide + (xInterval * column);
+        let y = topSide + (yInterval * row)
+        console.log(x,y);
+        this.slots.push(new InventorySlot(x, y, 'inventoryBox', game));
+      }
+    }
+    console.log(this.slots)
+  }
+  toggleVisibility() {
+    this.imageObject.visible = !this.imageObject.visible;
+    for (let i=0; i < this.slots.length; i++) {
+      this.slots[i].toggleVisibility();
+    }
+  }
+}
+//-------------------------------
+
 var player;
+var inventory;
 var cursors;
 var obstacles;
 
 function preload () {
 
   this.load.image('floor', 'assets/floor.png');
-  this.load.image('player', 'assets/circle.png');
   this.load.image('obstacle','assets/obstacle.png');
   this.load.spritesheet('assets', 'assets/spritesheet2.png', { frameWidth: 22, frameHeight: 22 });
+  this.load.image('inventoryBack', 'assets/inventoryBack.png');
+  this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }
 
 function create () {
@@ -51,18 +96,22 @@ function create () {
   //player.body.collideWorldBounds = true;
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
+  this.add.image(300, 200, 'obstacle').setScale(0.2);
 
   cursors = this.input.keyboard.createCursorKeys();
+  eKey = this.input.keyboard.addKey('E')
 
   this.cameras.main.setBounds(0, 0, 2190, 1460);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x,player.y);
-
-  //this.matter.add.collider(player, obstacles);
+  inventory = new Inventory(3,5, this);
 
 }
 
 function update () {
+  if (this.input.keyboard.checkDown(eKey, 500)) {
+    inventory.toggleVisibility()
+  }
   if (cursors.left.isDown && player.x > 0)
   {
       player.setVelocityX(-3);
@@ -150,6 +199,7 @@ function initialiseAnimations() {
       frameRate: 8
   });
 }
+
 </script>
 
 </body>
