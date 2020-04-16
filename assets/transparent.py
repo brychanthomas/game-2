@@ -1,3 +1,5 @@
+#Takes an image file and replaces all white pixels with transparent pixels.
+
 from PIL import Image
 
 img = Image.open('spritesheet.png')
