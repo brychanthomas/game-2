@@ -11,6 +11,7 @@ var config = {
   type: Phaser.CANVAS,
   width: 1000,
   height: 600,
+  pixelArt: true,
   physics: {
     default: 'arcade',
     arcade: {
@@ -35,14 +36,17 @@ function preload () {
   this.load.image('floor', 'assets/floor.png');
   this.load.image('player', 'assets/circle.png');
   this.load.image('obstacle','assets/obstacle.png');
+  this.load.spritesheet('assets', 'assets/spritesheet.png', { frameWidth: 22, frameHeight: 22 });
 }
 
 function create () {
 
   this.add.image(1095, 730, 'floor').setScale(2);
 
-  player = this.physics.add.sprite(300,300, 'player');
-  player.setScale(0.4);
+  initialiseAnimations();
+
+  player = this.physics.add.sprite(300,300, 'assets');
+  player.setScale(4);
   //player.body.collideWorldBounds = true;
 
   obstacles = this.physics.add.staticGroup();
@@ -62,32 +66,63 @@ function update () {
   if (cursors.left.isDown && player.x > 0)
   {
       player.setVelocityX(-200);
+      player.setVelocityY(0);
+      player.anims.play('left', true);
 
   }
   else if (cursors.right.isDown && player.x < 2190)
   {
       player.setVelocityX(200);
+      player.setVelocityY(0);
+      player.anims.play('right', true);
   }
 
   else
   {
       player.setVelocityX(0);
 
-  }
-
-  if (cursors.up.isDown && player.y > 0)
-  {
-      player.setVelocityY(-200);
-  }
-  else if (cursors.down.isDown && player.y < 1460) {
-      player.setVelocityY(200);
-  }
-  else {
-      player.setVelocityY(0);
+    if (cursors.up.isDown && player.y > 0)
+    {
+        player.setVelocityY(-200);
+        player.anims.play('down', true);
+    }
+    else if (cursors.down.isDown && player.y < 1460) {
+        player.setVelocityY(200);
+        player.anims.play('up', true);
+    }
+    else {
+        player.setVelocityY(0);
+      }
   }
   this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut')
 }
 
+function initialiseAnimations() {
+  game.anims.create({
+      key: 'up',
+      frames: game.anims.generateFrameNumbers('assets', { start: 0, end: 3 }),
+      frameRate: 8,
+      repeat: -1
+  });
+  game.anims.create({
+    key: 'right',
+    frames: game.anims.generateFrameNumbers('assets', { start: 4, end: 7 }),
+    frameRate: 8,
+    repeat: -1
+  });
+  game.anims.create({
+    key: 'down',
+    frames: game.anims.generateFrameNumbers('assets', { start: 9, end: 12 }),
+    frameRate: 8,
+    repeat: -1
+  });
+  game.anims.create({
+    key: 'left',
+    frames: game.anims.generateFrameNumbers('assets', { start: 13, end: 16 }),
+    frameRate: 8,
+    repeat: -1
+  });
+}
 </script>
 
 </body>
