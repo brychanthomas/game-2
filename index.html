@@ -15,7 +15,7 @@ var config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true
+      debug: false
     }
   },
   scene: {
@@ -36,7 +36,7 @@ function preload () {
   this.load.image('floor', 'assets/floor.png');
   this.load.image('player', 'assets/circle.png');
   this.load.image('obstacle','assets/obstacle.png');
-  this.load.spritesheet('assets', 'assets/spritesheet.png', { frameWidth: 22, frameHeight: 22 });
+  this.load.spritesheet('assets', 'assets/spritesheet2.png', { frameWidth: 22, frameHeight: 22 });
 }
 
 function create () {
@@ -84,25 +84,36 @@ function update () {
     if (cursors.up.isDown && player.y > 0)
     {
         player.setVelocityY(-200);
-        player.anims.play('down', true);
+        player.anims.play('up', true);
     }
     else if (cursors.down.isDown && player.y < 1460) {
         player.setVelocityY(200);
-        player.anims.play('up', true);
+        player.anims.play('down', true);
     }
     else {
         player.setVelocityY(0);
       }
   }
+  if(player.body.velocity.x === 0 && player.body.velocity.y === 0 && player.anims.currentAnim !== null) {
+    if (player.anims.currentAnim.key.slice(-4) !== 'Stop') {
+      player.anims.play(player.anims.currentAnim.key+'Stop', true)
+    }
+  }
+  //player.anims.currentAnim.key;
   this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut')
 }
 
 function initialiseAnimations() {
   game.anims.create({
-      key: 'up',
+      key: 'down',
       frames: game.anims.generateFrameNumbers('assets', { start: 0, end: 3 }),
       frameRate: 8,
       repeat: -1
+  });
+  game.anims.create({
+      key: 'downStop',
+      frames: [ { key: 'assets', frame: 0 } ],
+      frameRate: 8
   });
   game.anims.create({
     key: 'right',
@@ -111,16 +122,31 @@ function initialiseAnimations() {
     repeat: -1
   });
   game.anims.create({
-    key: 'down',
+      key: 'rightStop',
+      frames: [ { key: 'assets', frame: 4 } ],
+      frameRate: 8
+  });
+  game.anims.create({
+    key: 'up',
     frames: game.anims.generateFrameNumbers('assets', { start: 9, end: 12 }),
     frameRate: 8,
     repeat: -1
+  });
+  game.anims.create({
+      key: 'upStop',
+      frames: [ { key: 'assets', frame: 9 } ],
+      frameRate: 8
   });
   game.anims.create({
     key: 'left',
     frames: game.anims.generateFrameNumbers('assets', { start: 13, end: 16 }),
     frameRate: 8,
     repeat: -1
+  });
+  game.anims.create({
+      key: 'leftStop',
+      frames: [ { key: 'assets', frame: 13 } ],
+      frameRate: 8
   });
 }
 </script>
