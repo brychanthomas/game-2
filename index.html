@@ -31,13 +31,17 @@ var game = new Phaser.Game(config);
 //---------Code for inventory-----------
 class InventorySlot {
   constructor (x, y, image, game) {
+    this.baseX = x;
+    this.baseY = y;
     this.imageObject = game.add.image(x, y, image);
     this.imageObject.setScale(0.8);
     this.imageObject.visible = false;
     this.contents = null;
   }
-  toggleVisibility () {
+  toggleVisibility (camera) {
     this.imageObject.visible = !this.imageObject.visible;
+    this.imageObject.x = camera.scrollX + this.baseX;
+    this.imageObject.y = camera.scrollY + this.baseY;
   }
 }
 
@@ -46,6 +50,8 @@ class Inventory {
     this.imageObject = game.add.image(500, 300, 'inventoryBack');
     this.imageObject.visible = false;
     this.imageObject.setScale(0.8);
+    this.baseX = 500;
+    this.baseY = 300;
     let leftSide = 500 - (this.imageObject.width/2.5);
     let topSide = 300 - (this.imageObject.height/2.5);
     console.log(leftSide, topSide);
@@ -62,10 +68,13 @@ class Inventory {
     }
     console.log(this.slots)
   }
-  toggleVisibility() {
+  toggleVisibility(camera) {
     this.imageObject.visible = !this.imageObject.visible;
+    this.imageObject.x = camera.scrollX + this.baseX;
+    this.imageObject.y = camera.scrollY + this.baseY;
+    console.log(camera);
     for (let i=0; i < this.slots.length; i++) {
-      this.slots[i].toggleVisibility();
+      this.slots[i].toggleVisibility(camera);
     }
   }
 }
@@ -93,55 +102,60 @@ function create () {
 
   player = this.matter.add.sprite(300,300, 'assets');
   player.setScale(4);
+  console.log(player.body);
   //player.body.collideWorldBounds = true;
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
-  this.add.image(300, 200, 'obstacle').setScale(0.2);
 
   cursors = this.input.keyboard.createCursorKeys();
-  eKey = this.input.keyboard.addKey('E')
+  eKey = this.input.keyboard.addKey('E');
 
   this.cameras.main.setBounds(0, 0, 2190, 1460);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x,player.y);
-  inventory = new Inventory(3,5, this);
+  inventory = new Inventory(4,6, this);
 
 }
 
 function update () {
   if (this.input.keyboard.checkDown(eKey, 500)) {
-    inventory.toggleVisibility()
+    inventory.toggleVisibility(this.cameras.main);
   }
-  if (cursors.left.isDown && player.x > 0)
-  {
-      player.setVelocityX(-3);
-      player.setVelocityY(0);
-      player.anims.play('left', true);
-
-  }
-  else if (cursors.right.isDown && player.x < 2190)
-  {
-      player.setVelocityX(3);
-      player.setVelocityY(0);
-      player.anims.play('right', true);
-  }
-
-  else
-  {
-      player.setVelocityX(0);
-
-    if (cursors.up.isDown && player.y > 0)
+  if (!inventory.imageObject.visible) {
+    if (cursors.left.isDown && player.x > 0)
     {
-        player.setVelocityY(-3);
-        player.anims.play('up', true);
-    }
-    else if (cursors.down.isDown && player.y < 1460) {
-        player.setVelocityY(3);
-        player.anims.play('down', true);
-    }
-    else {
+        player.setVelocityX(-3);
         player.setVelocityY(0);
+        player.anims.play('left', true);
+
+    }
+    else if (cursors.right.isDown && player.x < 2190)
+    {
+        player.setVelocityX(3);
+        player.setVelocityY(0);
+        player.anims.play('right', true);
+    }
+
+    else
+    {
+        player.setVelocityX(0);
+
+      if (cursors.up.isDown && player.y > 0)
+      {
+          player.setVelocityY(-3);
+          player.anims.play('up', true);
       }
+      else if (cursors.down.isDown && player.y < 1460) {
+          player.setVelocityY(3);
+          player.anims.play('down', true);
+      }
+      else {
+          player.setVelocityY(0);
+        }
+    }
+  } else {
+    player.setVelocityX(0);
+    player.setVelocityY(0);
   }
   if(player.body.velocity.x === 0 && player.body.velocity.y === 0 && player.anims.currentAnim !== null) {
     if (player.anims.currentAnim.key.slice(-4) !== 'Stop') {
