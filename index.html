@@ -38,11 +38,15 @@ class InventorySlot {
     this.imageObject.visible = false;
     this.contents = null;
   }
+
+  //show/hide slot
   toggleVisibility (camera) {
     this.imageObject.visible = !this.imageObject.visible;
     this.imageObject.x = camera.scrollX + this.baseX;
     this.imageObject.y = camera.scrollY + this.baseY;
   }
+
+  //when mouse clicked pick up and drop off item if it is on this slot
   mouseClick(mouseX, mouseY, inHand) {
     let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
     let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseX < this.imageObject.y+this.imageObject.displayHeight/2;
@@ -54,6 +58,7 @@ class InventorySlot {
     return inHand;
   }
 }
+
 
 class Inventory {
   constructor(rows, columns, game) {
@@ -75,6 +80,8 @@ class Inventory {
       }
     }
   }
+
+  //show/hide when E key is pressed
   toggleVisibility(camera) {
     this.imageObject.visible = !this.imageObject.visible;
     this.imageObject.x = camera.scrollX + this.baseX;
@@ -179,6 +186,7 @@ function update () {
   player.setAngle(0);
 }
 
+//create all of the animations for the player
 function initialise_animations() {
   game.anims.create({
       key: 'down',
@@ -226,6 +234,7 @@ function initialise_animations() {
   });
 }
 
+//on mouse click for inventory management
 function on_click(pointer) {
   if (inventory.imageObject.visible) {
     inventory.slots.forEach(function (slot, index) {
@@ -234,6 +243,7 @@ function on_click(pointer) {
   }
 }
 
+//change the size of the player's bounding box depending on their direction
 function change_bounding_box(direction) {
   if (direction === 'side') {
     player.body.vertices[0].x = player.x - 18;
