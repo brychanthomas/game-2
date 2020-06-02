@@ -1,3 +1,8 @@
+//individual slots within the inventory window
+const items = [
+  new Item('Battery', 18, 'TBD')
+]
+
 class InventorySlot {
   constructor (x, y, image, game) {
     this.baseX = x;
@@ -28,7 +33,7 @@ class InventorySlot {
   }
 }
 
-
+//the inventory window
 class Inventory {
   #imageObject; //private attribute storing Phaser image object
 
@@ -74,5 +79,14 @@ class Inventory {
       }
       console.log(this.inHand);
     }
+  }
+}
+
+//individual item
+class Item {
+  constructor(name, frameNumber, recipe) {
+    this.name = name;
+    this.frameNumber = frameNumber;
+    this.recipe = recipe;
   }
 }
