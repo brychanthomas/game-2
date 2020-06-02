@@ -52,7 +52,7 @@ function create () {
   this.cameras.main.setBounds(0, 0, 2190, 1460);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x,player.y);
-  inventory = new Inventory(4,6, this);
+  inventory = new Inventory(4, 6, this);
 
   this.input.on('pointerdown', on_click, this);
 
@@ -162,11 +162,7 @@ function initialise_animations() {
 
 //on mouse click for inventory management
 function on_click(pointer) {
-  if (inventory.isVisible()) {
-    inventory.slots.forEach(function (slot, index) {
-      inventory.inHand = slot.click(pointer.x, pointer.y, inventory.inHand);
-    });
-  }
+  inventory.mouseClick(pointer.x, pointer.y);
 }
 
 //change the size of the player's bounding box depending on their direction

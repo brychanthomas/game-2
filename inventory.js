@@ -66,4 +66,13 @@ class Inventory {
   isVisible() {
     return this.#imageObject.visible;
   }
+
+  mouseClick(x, y) {
+    if (this.isVisible()) {
+      for (let i=0; i<this.slots.length; i++) {
+        this.inHand = this.slots[i].mouseClick(x, y, this.inHand);
+      }
+      console.log(this.inHand);
+    }
+  }
 }
