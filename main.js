@@ -61,7 +61,7 @@ function create () {
 
 function update () {
   if (this.input.keyboard.checkDown(eKey, 500)) {
-    inventory.toggleVisibility(this);
+    inventory.toggleVisibility();
   }
   if (!inventory.isVisible()) {
     if (cursors.left.isDown && player.x > 0)

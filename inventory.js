@@ -6,28 +6,32 @@ class InventorySlot {
     this.imageObject = game.add.image(x, y, image);
     this.imageObject.setScale(0.8);
     this.imageObject.visible = false;
+    this.contentsSprite = game.add.sprite(this.imageObject.x, this.imageObject.y, 'assets');
+    this.contentsSprite.setScale(3);
+    this.contentsSprite.visible = false;
     this.contents = null;
+    this.game = game;
   }
 
   //show/hide slot
-  toggleVisibility (game) {
+  toggleVisibility () {
     this.imageObject.visible = !this.imageObject.visible;
-    this.imageObject.x = game.cameras.main.scrollX + this.baseX;
-    this.imageObject.y = game.cameras.main.scrollY + this.baseY;
+    this.imageObject.x = this.game.cameras.main.scrollX + this.baseX;
+    this.imageObject.y = this.game.cameras.main.scrollY + this.baseY;
     this._toggleVisibilityOfContents(game);
 
   }
 
-  //show/hide (or create) image of contents of inventory slot
-  _toggleVisibilityOfContents(game) {
-    if (this.contents !== null && this.contentsImage === undefined) {
-      this.contentsImage = game.add.image(this.imageObject.x, this.imageObject.y, 'assets', this.contents.frameNumber);
-      this.contentsImage.setScale(3);
-      this.contentsImage.visible = this.imageObject.visible;
-    } else if (this.contents !== null && this.contentsImage !== undefined) {
-      this.contentsImage.visible = !this.contentsImage.visible;
-      this.contentsImage.x = game.cameras.main.scrollX + this.baseX;
-      this.contentsImage.y = game.cameras.main.scrollY + this.baseY;
+  //show/hide image of contents of inventory slot
+  _toggleVisibilityOfContents() {
+    if (this.contents !== null && this.contents !== undefined) {
+      //I'm not sure why I have to do this to change the frame but it works
+      this.contentsSprite.frame = this.contentsSprite.frame.texture.frames[this.contents.frameNumber];
+      this.contentsSprite.visible = !this.contentsSprite.visible;
+      this.contentsSprite.x = this.game.cameras.main.scrollX + this.baseX;
+      this.contentsSprite.y = this.game.cameras.main.scrollY + this.baseY;
+    } else {
+      this.contentsSprite.visible = false;
     }
   }
 
@@ -41,6 +45,7 @@ class InventorySlot {
       this.contents = inHand;
       inHand = temp;
     }
+    this._toggleVisibilityOfContents();
     return inHand; //return
   }
 }
@@ -53,6 +58,7 @@ class Inventory {
     this.#imageObject = game.add.image(500, 300, 'inventoryBack');
     this.#imageObject.visible = false;
     this.#imageObject.setScale(0.8);
+    this.game = game;
     this.baseX = 500;
     this.baseY = 300;
     let leftSide = 500 - (this.#imageObject.width/2.5);
@@ -72,8 +78,8 @@ class Inventory {
   //show/hide when E key is pressed
   toggleVisibility(game) {
     this.#imageObject.visible = !this.#imageObject.visible;
-    this.#imageObject.x = game.cameras.main.scrollX + this.baseX;
-    this.#imageObject.y = game.cameras.main.scrollY + this.baseY;
+    this.#imageObject.x = this.game.cameras.main.scrollX + this.baseX;
+    this.#imageObject.y = this.game.cameras.main.scrollY + this.baseY;
     for (let i=0; i < this.slots.length; i++) {
       this.slots[i].toggleVisibility(game);
     }
