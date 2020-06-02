@@ -44,8 +44,8 @@ class InventorySlot {
       let temp = this.contents;
       this.contents = inHand;
       inHand = temp;
+      this._toggleVisibilityOfContents();
     }
-    this._toggleVisibilityOfContents();
     return inHand; //return
   }
 }
