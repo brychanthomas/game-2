@@ -62,7 +62,7 @@ function update () {
   if (this.input.keyboard.checkDown(eKey, 500)) {
     inventory.toggleVisibility(this.cameras.main);
   }
-  if (!inventory.imageObject.visible) {
+  if (!inventory.isVisible()) {
     if (cursors.left.isDown && player.x > 0)
     {
         player.setVelocityX(-3);
@@ -162,7 +162,7 @@ function initialise_animations() {
 
 //on mouse click for inventory management
 function on_click(pointer) {
-  if (inventory.imageObject.visible) {
+  if (inventory.isVisible()) {
     inventory.slots.forEach(function (slot, index) {
       inventory.inHand = slot.click(pointer.x, pointer.y, inventory.inHand);
     });
