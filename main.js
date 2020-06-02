@@ -169,22 +169,22 @@ function on_click(pointer) {
 //change the size of the player's bounding box depending on their direction
 function change_bounding_box(direction) {
   if (direction === 'side') {
-    player.body.vertices[0].x = player.x - 18;
-    player.body.vertices[0].y = player.y - 32;
-    player.body.vertices[1].x = player.x + 18;
-    player.body.vertices[1].y = player.y - 32;
-    player.body.vertices[2].x = player.x + 18;
-    player.body.vertices[2].y = player.y + 40;
-    player.body.vertices[3].x = player.x - 18;
-    player.body.vertices[3].y = player.y + 40;
+    player.body.vertices[0].x = player.x - 12;
+    player.body.vertices[0].y = player.y - 25;
+    player.body.vertices[1].x = player.x + 12;
+    player.body.vertices[1].y = player.y - 25;
+    player.body.vertices[2].x = player.x + 12;
+    player.body.vertices[2].y = player.y + 30;
+    player.body.vertices[3].x = player.x - 12;
+    player.body.vertices[3].y = player.y + 30;
   } else {
-    player.body.vertices[0].x = player.x - 20;
-    player.body.vertices[0].y = player.y - 32;
-    player.body.vertices[1].x = player.x + 23;
-    player.body.vertices[1].y = player.y - 32;
-    player.body.vertices[2].x = player.x + 23;
-    player.body.vertices[2].y = player.y + 40;
-    player.body.vertices[3].x = player.x - 20;
-    player.body.vertices[3].y = player.y + 40;
+    player.body.vertices[0].x = player.x - 15;
+    player.body.vertices[0].y = player.y - 24;
+    player.body.vertices[1].x = player.x + 15;
+    player.body.vertices[1].y = player.y - 24;
+    player.body.vertices[2].x = player.x + 15;
+    player.body.vertices[2].y = player.y + 30;
+    player.body.vertices[3].x = player.x - 14;
+    player.body.vertices[3].y = player.y + 30;
   }
 }
