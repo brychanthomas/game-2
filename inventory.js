@@ -18,6 +18,7 @@ class InventorySlot {
 
   }
 
+  //show/hide (or create) image of contents of inventory slot
   _toggleVisibilityOfContents(game) {
     if (this.contents !== null && this.contentsImage === undefined) {
       this.contentsImage = game.add.image(this.imageObject.x, this.imageObject.y, 'assets', this.contents.frameNumber);
@@ -33,7 +34,7 @@ class InventorySlot {
   //when mouse clicked pick up and drop off item if it is on this slot
   mouseClick(mouseX, mouseY, inHand) {
     let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
-    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseX < this.imageObject.y+this.imageObject.displayHeight/2;
+    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseY < this.imageObject.y+(this.imageObject.displayHeight/2);
     if (withinX && withinY) {
       console.log(this.contents);
       let temp = this.contents;
@@ -88,7 +89,6 @@ class Inventory {
       for (let i=0; i<this.slots.length; i++) {
         this.inHand = this.slots[i].mouseClick(x, y, this.inHand);
       }
-      console.log(this.inHand);
     }
   }
 }
