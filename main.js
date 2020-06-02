@@ -41,7 +41,7 @@ function create () {
   initialise_animations();
 
   player = this.matter.add.sprite(300,300, 'assets');
-  player.setScale(4);
+  player.setScale(3);
   //player.body.collideWorldBounds = true;
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
@@ -53,6 +53,7 @@ function create () {
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x,player.y);
   inventory = new Inventory(4, 6, this);
+  inventory.slots[0].contents = items[0];
 
   this.input.on('pointerdown', on_click, this);
 
@@ -60,7 +61,7 @@ function create () {
 
 function update () {
   if (this.input.keyboard.checkDown(eKey, 500)) {
-    inventory.toggleVisibility(this.cameras.main);
+    inventory.toggleVisibility(this);
   }
   if (!inventory.isVisible()) {
     if (cursors.left.isDown && player.x > 0)

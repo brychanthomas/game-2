@@ -1,8 +1,4 @@
 //individual slots within the inventory window
-const items = [
-  new Item('Battery', 18, 'TBD')
-]
-
 class InventorySlot {
   constructor (x, y, image, game) {
     this.baseX = x;
@@ -14,10 +10,24 @@ class InventorySlot {
   }
 
   //show/hide slot
-  toggleVisibility (camera) {
+  toggleVisibility (game) {
     this.imageObject.visible = !this.imageObject.visible;
-    this.imageObject.x = camera.scrollX + this.baseX;
-    this.imageObject.y = camera.scrollY + this.baseY;
+    this.imageObject.x = game.cameras.main.scrollX + this.baseX;
+    this.imageObject.y = game.cameras.main.scrollY + this.baseY;
+    this._toggleVisibilityOfContents(game);
+
+  }
+
+  _toggleVisibilityOfContents(game) {
+    if (this.contents !== null && this.contentsImage === undefined) {
+      this.contentsImage = game.add.image(this.imageObject.x, this.imageObject.y, 'assets', this.contents.frameNumber);
+      this.contentsImage.setScale(3);
+      this.contentsImage.visible = this.imageObject.visible;
+    } else if (this.contents !== null && this.contentsImage !== undefined) {
+      this.contentsImage.visible = !this.contentsImage.visible;
+      this.contentsImage.x = game.cameras.main.scrollX + this.baseX;
+      this.contentsImage.y = game.cameras.main.scrollY + this.baseY;
+    }
   }
 
   //when mouse clicked pick up and drop off item if it is on this slot
@@ -25,6 +35,7 @@ class InventorySlot {
     let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
     let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseX < this.imageObject.y+this.imageObject.displayHeight/2;
     if (withinX && withinY) {
+      console.log(this.contents);
       let temp = this.contents;
       this.contents = inHand;
       inHand = temp;
@@ -58,12 +69,12 @@ class Inventory {
   }
 
   //show/hide when E key is pressed
-  toggleVisibility(camera) {
+  toggleVisibility(game) {
     this.#imageObject.visible = !this.#imageObject.visible;
-    this.#imageObject.x = camera.scrollX + this.baseX;
-    this.#imageObject.y = camera.scrollY + this.baseY;
+    this.#imageObject.x = game.cameras.main.scrollX + this.baseX;
+    this.#imageObject.y = game.cameras.main.scrollY + this.baseY;
     for (let i=0; i < this.slots.length; i++) {
-      this.slots[i].toggleVisibility(camera);
+      this.slots[i].toggleVisibility(game);
     }
   }
 
@@ -90,3 +101,7 @@ class Item {
     this.recipe = recipe;
   }
 }
+
+const items = [
+  new Item('Battery', 20, 'TBD')
+]
