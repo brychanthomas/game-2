@@ -149,7 +149,7 @@ class Player {
   }
 
   get y() {
-    return this.sprite.y
+    return this.sprite.y;
   }
 }
 var player;
