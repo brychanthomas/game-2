@@ -96,9 +96,9 @@ class Player {
     } else {
       this.sprite.body.vertices[0].x = this.sprite.x - 15;
       this.sprite.body.vertices[0].y = this.sprite.y - 24;
-      this.sprite.body.vertices[1].x = this.sprite.x + 15;
+      this.sprite.body.vertices[1].x = this.sprite.x + 18;
       this.sprite.body.vertices[1].y = this.sprite.y - 24;
-      this.sprite.body.vertices[2].x = this.sprite.x + 15;
+      this.sprite.body.vertices[2].x = this.sprite.x + 18;
       this.sprite.body.vertices[2].y = this.sprite.y + 30;
       this.sprite.body.vertices[3].x = this.sprite.x - 14;
       this.sprite.body.vertices[3].y = this.sprite.y + 30;
