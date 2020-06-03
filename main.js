@@ -19,7 +19,99 @@ var config = {
 
 var game = new Phaser.Game(config);
 
+class Player {
+  constructor (game, spritesheet, x, y) {
+    this.sprite = game.matter.add.sprite(x, y, spritesheet);
+    this.sprite.setScale(3);
+    this.game = game;
+    this._initialise_animations();
+  }
 
+  //create all of the animations for the player
+  _initialise_animations() {
+    this.game.anims.create({
+        key: 'down',
+        frames: game.anims.generateFrameNumbers('assets', { start: 0, end: 3 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.game.anims.create({
+        key: 'downStop',
+        frames: [ { key: 'assets', frame: 0 } ],
+        frameRate: 8
+    });
+    this.game.anims.create({
+      key: 'right',
+      frames: game.anims.generateFrameNumbers('assets', { start: 4, end: 7 }),
+      frameRate: 8,
+      repeat: -1
+    });
+    this.game.anims.create({
+        key: 'rightStop',
+        frames: [ { key: 'assets', frame: 4 } ],
+        frameRate: 8
+    });
+    this.game.anims.create({
+      key: 'up',
+      frames: game.anims.generateFrameNumbers('assets', { start: 9, end: 12 }),
+      frameRate: 8,
+      repeat: -1
+    });
+    this.game.anims.create({
+        key: 'upStop',
+        frames: [ { key: 'assets', frame: 9 } ],
+        frameRate: 8
+    });
+    this.game.anims.create({
+      key: 'left',
+      frames: game.anims.generateFrameNumbers('assets', { start: 13, end: 16 }),
+      frameRate: 8,
+      repeat: -1
+    });
+    this.game.anims.create({
+        key: 'leftStop',
+        frames: [ { key: 'assets', frame: 13 } ],
+        frameRate: 8
+    });
+  }
+
+  //set the player sprite's x and y velocity
+  setVelocity(x, y) {
+    this.sprite.setVelocityX(x);
+    this.sprite.setVelocityY(y);
+  }
+
+  //change the size of the player's bounding box depending on which direction
+  //they are facing
+  change_bounding_box(direction) {
+    if (direction === 'side') {
+      this.sprite.body.vertices[0].x = this.sprite.x - 12;
+      this.sprite.body.vertices[0].y = this.sprite.y - 25;
+      this.sprite.body.vertices[1].x = this.sprite.x + 12;
+      this.sprite.body.vertices[1].y = this.sprite.y - 25;
+      this.sprite.body.vertices[2].x = this.sprite.x + 12;
+      this.sprite.body.vertices[2].y = this.sprite.y + 30;
+      this.sprite.body.vertices[3].x = this.sprite.x - 12;
+      this.sprite.body.vertices[3].y = this.sprite.y + 30;
+    } else {
+      this.sprite.body.vertices[0].x = this.sprite.x - 15;
+      this.sprite.body.vertices[0].y = this.sprite.y - 24;
+      this.sprite.body.vertices[1].x = this.sprite.x + 15;
+      this.sprite.body.vertices[1].y = this.sprite.y - 24;
+      this.sprite.body.vertices[2].x = this.sprite.x + 15;
+      this.sprite.body.vertices[2].y = this.sprite.y + 30;
+      this.sprite.body.vertices[3].x = this.sprite.x - 14;
+      this.sprite.body.vertices[3].y = this.sprite.y + 30;
+    }
+  }
+  get x() {
+    return this.sprite.x;
+  }
+
+  get y() {
+    return this.sprite.y
+  }
+}
 var player;
 var inventory;
 var cursors;
@@ -38,10 +130,7 @@ function create () {
 
   this.add.image(1095, 730, 'floor').setScale(2);
 
-  initialise_animations();
-
-  player = this.matter.add.sprite(300,300, 'assets');
-  player.setScale(3);
+  player = new Player(this, 'assets', 300, 300);
   //player.body.collideWorldBounds = true;
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
@@ -66,128 +155,52 @@ function update () {
   if (!inventory.isVisible()) {
     if (cursors.left.isDown && player.x > 0)
     {
-        player.setVelocityX(-3);
-        player.setVelocityY(0);
-        player.anims.play('left', true);
-        change_bounding_box('side');
+        player.setVelocity(-3, 0);
+        player.sprite.anims.play('left', true);
+        player.change_bounding_box('side');
 
     }
     else if (cursors.right.isDown && player.x < 2190)
     {
-        player.setVelocityX(3);
-        player.setVelocityY(0);
-        player.anims.play('right', true);
-        change_bounding_box('side');
+        player.setVelocity(3, 0);
+        player.sprite.anims.play('right', true);
+        player.change_bounding_box('side');
     }
 
     else
     {
-        player.setVelocityX(0);
 
       if (cursors.up.isDown && player.y > 0)
       {
-          player.setVelocityY(-3);
-          player.anims.play('up', true);
-          change_bounding_box('top');
+          player.setVelocity(0, -3);
+          player.sprite.anims.play('up', true);
+          player.change_bounding_box('top');
       }
       else if (cursors.down.isDown && player.y < 1460) {
-          player.setVelocityY(3);
-          player.anims.play('down', true);
-          change_bounding_box('top');
+          player.setVelocity(0, 3);
+          player.sprite.anims.play('down', true);
+          player.change_bounding_box('top');
       }
       else {
-          player.setVelocityY(0);
+          player.setVelocity(0, 0);
         }
     }
   } else {
-    player.setVelocityX(0);
-    player.setVelocityY(0);
+    player.setVelocity(0, 0);
   }
-  if(player.body.velocity.x === 0 && player.body.velocity.y === 0 && player.anims.currentAnim !== null) {
-    if (player.anims.currentAnim.key.slice(-4) !== 'Stop') {
-      player.anims.play(player.anims.currentAnim.key+'Stop', true)
+  if(player.sprite.body.velocity.x === 0 && player.sprite.body.velocity.y === 0 && player.sprite.anims.currentAnim !== null) {
+    if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
+      player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true)
     }
   }
-  //player.anims.currentAnim.key;
-  this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut')
-  player.setAngle(0);
+  this.cameras.main.pan(player.sprite.x, player.sprite.y, 0, 'Sine.easeInOut')
+  player.sprite.setAngle(0);
   inventory.updateInHandImage();
-}
-
-//create all of the animations for the player
-function initialise_animations() {
-  game.anims.create({
-      key: 'down',
-      frames: game.anims.generateFrameNumbers('assets', { start: 0, end: 3 }),
-      frameRate: 8,
-      repeat: -1
-  });
-  game.anims.create({
-      key: 'downStop',
-      frames: [ { key: 'assets', frame: 0 } ],
-      frameRate: 8
-  });
-  game.anims.create({
-    key: 'right',
-    frames: game.anims.generateFrameNumbers('assets', { start: 4, end: 7 }),
-    frameRate: 8,
-    repeat: -1
-  });
-  game.anims.create({
-      key: 'rightStop',
-      frames: [ { key: 'assets', frame: 4 } ],
-      frameRate: 8
-  });
-  game.anims.create({
-    key: 'up',
-    frames: game.anims.generateFrameNumbers('assets', { start: 9, end: 12 }),
-    frameRate: 8,
-    repeat: -1
-  });
-  game.anims.create({
-      key: 'upStop',
-      frames: [ { key: 'assets', frame: 9 } ],
-      frameRate: 8
-  });
-  game.anims.create({
-    key: 'left',
-    frames: game.anims.generateFrameNumbers('assets', { start: 13, end: 16 }),
-    frameRate: 8,
-    repeat: -1
-  });
-  game.anims.create({
-      key: 'leftStop',
-      frames: [ { key: 'assets', frame: 13 } ],
-      frameRate: 8
-  });
 }
 
 //on mouse click for inventory management
 function on_click(pointer) {
   inventory.mouseClick(pointer.x, pointer.y);
-}
-
-//change the size of the player's bounding box depending on their direction
-function change_bounding_box(direction) {
-  if (direction === 'side') {
-    player.body.vertices[0].x = player.x - 12;
-    player.body.vertices[0].y = player.y - 25;
-    player.body.vertices[1].x = player.x + 12;
-    player.body.vertices[1].y = player.y - 25;
-    player.body.vertices[2].x = player.x + 12;
-    player.body.vertices[2].y = player.y + 30;
-    player.body.vertices[3].x = player.x - 12;
-    player.body.vertices[3].y = player.y + 30;
-  } else {
-    player.body.vertices[0].x = player.x - 15;
-    player.body.vertices[0].y = player.y - 24;
-    player.body.vertices[1].x = player.x + 15;
-    player.body.vertices[1].y = player.y - 24;
-    player.body.vertices[2].x = player.x + 15;
-    player.body.vertices[2].y = player.y + 30;
-    player.body.vertices[3].x = player.x - 14;
-    player.body.vertices[3].y = player.y + 30;
-  }
 }
 
 //TODO: item held by cursor when moving things in inventory
