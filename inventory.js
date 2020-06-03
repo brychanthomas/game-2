@@ -23,11 +23,11 @@ class InventorySlot {
   }
 
   //show/hide image of contents of inventory slot
-  _toggleVisibilityOfContents() {
+  _toggleVisibilityOfContents(visibility) {
     if (this.contents !== null && this.contents !== undefined) {
       //I'm not sure why I have to do this to change the frame but it works
       this.contentsSprite.frame = this.contentsSprite.frame.texture.frames[this.contents.frameNumber];
-      this.contentsSprite.visible = !this.contentsSprite.visible;
+      this.contentsSprite.visible = this.imageObject.visible;
       this.contentsSprite.x = this.game.cameras.main.scrollX + this.baseX;
       this.contentsSprite.y = this.game.cameras.main.scrollY + this.baseY;
     } else {
