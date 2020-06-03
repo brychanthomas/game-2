@@ -104,6 +104,46 @@ class Player {
       this.sprite.body.vertices[3].y = this.sprite.y + 30;
     }
   }
+
+  //move and set animations
+  update(cursors) {
+    if (cursors.left.isDown && this.x > 0) {
+      this.setVelocity(-3, 0);
+      this.sprite.anims.play('left', true);
+      this.change_bounding_box('side');
+    }
+    else if (cursors.right.isDown && this.x < 2190) {
+      this.setVelocity(3, 0);
+      this.sprite.anims.play('right', true);
+      this.change_bounding_box('side');
+    }
+    else {
+      if (cursors.up.isDown && this.y > 0){
+        this.setVelocity(0, -3);
+        this.sprite.anims.play('up', true);
+        this.change_bounding_box('top');
+      }
+      else if (cursors.down.isDown && this.y < 1460) {
+        this.setVelocity(0, 3);
+        this.sprite.anims.play('down', true);
+        this.change_bounding_box('top');
+      }
+      else {
+        this.stop();
+      }
+    }
+  }
+
+  //stop animations and movement
+  stop() {
+    if(player.sprite.body.velocity.x === 0 && player.sprite.body.velocity.y === 0 && player.sprite.anims.currentAnim !== null) {
+      if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
+        player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true)
+      }
+    }
+    this.setVelocity(0,0);
+  }
+
   get x() {
     return this.sprite.x;
   }
@@ -153,47 +193,11 @@ function update () {
     inventory.toggleVisibility();
   }
   if (!inventory.isVisible()) {
-    if (cursors.left.isDown && player.x > 0)
-    {
-        player.setVelocity(-3, 0);
-        player.sprite.anims.play('left', true);
-        player.change_bounding_box('side');
-
-    }
-    else if (cursors.right.isDown && player.x < 2190)
-    {
-        player.setVelocity(3, 0);
-        player.sprite.anims.play('right', true);
-        player.change_bounding_box('side');
-    }
-
-    else
-    {
-
-      if (cursors.up.isDown && player.y > 0)
-      {
-          player.setVelocity(0, -3);
-          player.sprite.anims.play('up', true);
-          player.change_bounding_box('top');
-      }
-      else if (cursors.down.isDown && player.y < 1460) {
-          player.setVelocity(0, 3);
-          player.sprite.anims.play('down', true);
-          player.change_bounding_box('top');
-      }
-      else {
-          player.setVelocity(0, 0);
-        }
-    }
+    player.update(cursors);
   } else {
-    player.setVelocity(0, 0);
+    player.stop();
   }
-  if(player.sprite.body.velocity.x === 0 && player.sprite.body.velocity.y === 0 && player.sprite.anims.currentAnim !== null) {
-    if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
-      player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true)
-    }
-  }
-  this.cameras.main.pan(player.sprite.x, player.sprite.y, 0, 'Sine.easeInOut')
+  this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut')
   player.sprite.setAngle(0);
   inventory.updateInHandImage();
 }
