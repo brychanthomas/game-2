@@ -92,8 +92,10 @@ class Inventory {
 
   mouseClick(x, y) {
     if (this.isVisible()) {
+      let relX = x + this.#imageObject.x - 500;
+      let relY = y + this.#imageObject.y - 300;
       for (let i=0; i<this.slots.length; i++) {
-        this.inHand = this.slots[i].mouseClick(x, y, this.inHand);
+        this.inHand = this.slots[i].mouseClick(relX, relY, this.inHand);
       }
     }
   }
@@ -108,8 +110,8 @@ class Inventory {
     if (this.inHand !== null && this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
       this.inHandSprite.visible = true;
-      this.inHandSprite.x = this.game.input.mousePointer.x;
-      this.inHandSprite.y = this.game.input.mousePointer.y;
+      this.inHandSprite.x = this.game.input.mousePointer.x + this.#imageObject.x - 500;
+      this.inHandSprite.y = this.game.input.mousePointer.y  + this.#imageObject.y - 300;
     } else {
       this.inHandSprite.visible = false;
     }
