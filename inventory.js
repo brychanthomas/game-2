@@ -92,8 +92,8 @@ class Inventory {
 
   mouseClick(x, y) {
     if (this.isVisible()) {
-      let relX = x + this.#imageObject.x - 500;
-      let relY = y + this.#imageObject.y - 300;
+      let relX = x + this.game.cameras.main.scrollX;
+      let relY = y + this.game.cameras.main.scrollY;
       for (let i=0; i<this.slots.length; i++) {
         this.inHand = this.slots[i].mouseClick(relX, relY, this.inHand);
       }
@@ -110,8 +110,8 @@ class Inventory {
     if (this.inHand !== null && this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
       this.inHandSprite.visible = true;
-      this.inHandSprite.x = this.game.input.mousePointer.x + this.#imageObject.x - 500;
-      this.inHandSprite.y = this.game.input.mousePointer.y  + this.#imageObject.y - 300;
+      this.inHandSprite.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
+      this.inHandSprite.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY;
     } else {
       this.inHandSprite.visible = false;
     }
