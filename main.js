@@ -111,6 +111,7 @@ function update () {
   //player.anims.currentAnim.key;
   this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut')
   player.setAngle(0);
+  inventory.updateInHandImage();
 }
 
 //create all of the animations for the player
@@ -188,3 +189,6 @@ function change_bounding_box(direction) {
     player.body.vertices[3].y = player.y + 30;
   }
 }
+
+//TODO: item held by cursor when moving things in inventory
+//TODO: player class

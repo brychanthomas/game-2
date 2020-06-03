@@ -97,6 +97,23 @@ class Inventory {
       }
     }
   }
+
+  //update the visibility, frame number and position of the object being held
+  //by the mouse (create the sprite if it doesn't exist)
+  updateInHandImage() {
+    if (this.inHandSprite === undefined) {
+      this.inHandSprite = this.game.add.sprite(0, 0, 'assets');
+      this.inHandSprite.setScale(3);
+    }
+    if (this.inHand !== null && this.inHand !== undefined) {
+      this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
+      this.inHandSprite.visible = true;
+      this.inHandSprite.x = this.game.input.mousePointer.x;
+      this.inHandSprite.y = this.game.input.mousePointer.y;
+    } else {
+      this.inHandSprite.visible = false;
+    }
+  }
 }
 
 //individual item
