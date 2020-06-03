@@ -107,23 +107,23 @@ class Player {
 
   //move and set animations
   update(cursors) {
-    if (cursors.left.isDown && this.x > 0) {
+    if (cursors.a.isDown && this.x > 0) {
       this.setVelocity(-3, 0);
       this.sprite.anims.play('left', true);
       this.change_bounding_box('side');
     }
-    else if (cursors.right.isDown && this.x < 2190) {
+    else if (cursors.d.isDown && this.x < 2190) {
       this.setVelocity(3, 0);
       this.sprite.anims.play('right', true);
       this.change_bounding_box('side');
     }
     else {
-      if (cursors.up.isDown && this.y > 0){
+      if (cursors.w.isDown && this.y > 0){
         this.setVelocity(0, -3);
         this.sprite.anims.play('up', true);
         this.change_bounding_box('top');
       }
-      else if (cursors.down.isDown && this.y < 1460) {
+      else if (cursors.s.isDown && this.y < 1460) {
         this.setVelocity(0, 3);
         this.sprite.anims.play('down', true);
         this.change_bounding_box('top');
@@ -138,7 +138,7 @@ class Player {
   stop() {
     if(player.sprite.body.velocity.x === 0 && player.sprite.body.velocity.y === 0 && player.sprite.anims.currentAnim !== null) {
       if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
-        player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true)
+        player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true);
       }
     }
     this.setVelocity(0,0);
@@ -154,7 +154,7 @@ class Player {
 }
 var player;
 var inventory;
-var cursors;
+var wasdKeys;
 var obstacles;
 
 function preload () {
@@ -171,11 +171,15 @@ function create () {
   this.add.image(1095, 730, 'floor').setScale(2);
 
   player = new Player(this, 'assets', 300, 300);
-  //player.body.collideWorldBounds = true;
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
 
-  cursors = this.input.keyboard.createCursorKeys();
+  wasdKeys = {
+    'w': this.input.keyboard.addKey('W'),
+    'a': this.input.keyboard.addKey('A'),
+    's': this.input.keyboard.addKey('S'),
+    'd': this.input.keyboard.addKey('D')
+  }
   eKey = this.input.keyboard.addKey('E');
 
   this.cameras.main.setBounds(0, 0, 2190, 1460);
@@ -193,11 +197,11 @@ function update () {
     inventory.toggleVisibility();
   }
   if (!inventory.isVisible()) {
-    player.update(cursors);
+    player.update(wasdKeys);
   } else {
     player.stop();
   }
-  this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut')
+  this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut');
   player.sprite.setAngle(0);
   inventory.updateInHandImage();
 }
@@ -206,6 +210,3 @@ function update () {
 function on_click(pointer) {
   inventory.mouseClick(pointer.x, pointer.y);
 }
-
-//TODO: item held by cursor when moving things in inventory
-//TODO: player class
