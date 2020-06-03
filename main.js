@@ -187,6 +187,7 @@ function create () {
   this.cameras.main.centerOn(player.x,player.y);
   inventory = new Inventory(4, 6, this);
   inventory.slots[0].contents = items[0];
+  inventory.slots[1].contents = items[1];
 
   this.input.on('pointerdown', on_click, this);
 

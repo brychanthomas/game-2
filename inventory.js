@@ -128,5 +128,6 @@ class Item {
 }
 
 const items = [
-  new Item('Battery', 20, 'TBD')
+  new Item('Battery', 20, 'TBD'),
+  new Item('Cables', 23, 'TBD')
 ]
