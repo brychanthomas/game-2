@@ -28,7 +28,7 @@ function preload () {
 
   this.load.image('floor', 'assets/floor.png');
   this.load.image('obstacle','assets/obstacle.png');
-  this.load.spritesheet('assets', 'assets/spritesheet2.png', { frameWidth: 22, frameHeight: 22 });
+  this.load.spritesheet('assets', 'assets/spritesheet2.png', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }
@@ -51,7 +51,7 @@ function create () {
 
   this.cameras.main.setBounds(0, 0, 2190, 1460);
   this.cameras.main.setZoom(1);
-  this.cameras.main.centerOn(player.x,player.y);
+  this.cameras.main.centerOn(player.x, player.y);
   inventory = new Inventory(4, 6, this);
   inventory.slots[0].contents = items[0];
   inventory.slots[1].contents = items[1];
@@ -69,7 +69,7 @@ function update () {
   } else {
     player.stop();
   }
-  this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut');
+  this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
 }
 
