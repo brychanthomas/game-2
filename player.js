@@ -112,11 +112,12 @@ class Player {
         this.stop();
       }
     }
+    this.sprite.setAngle(0);
   }
 
   //stop animations and movement
   stop() {
-    if(player.sprite.body.velocity.x === 0 && player.sprite.body.velocity.y === 0 && player.sprite.anims.currentAnim !== null) {
+    if(player.sprite.anims.currentAnim !== null) {
       if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
         player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true);
       }

@@ -70,7 +70,6 @@ function update () {
     player.stop();
   }
   this.cameras.main.pan(player.x, player.y, 0, 'Sine.easeInOut');
-  player.sprite.setAngle(0);
   inventory.updateInHandImage();
 }
 
