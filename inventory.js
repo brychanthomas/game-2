@@ -115,10 +115,14 @@ class Inventory {
   }
 
     addItem(item) {
+      if (typeof item === "string") {
+        item = ITEMS.find((itm, ind, arr) => itm.name === item);
+        if (typeof item === "string") { return }
+      }
       for (let slot of this.slots) {
         if (slot.contents == null) {
           slot.contents = item;
-          break;
+          return;
         }
       }
     }
