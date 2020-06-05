@@ -6,7 +6,7 @@ class InventorySlot {
     this.imageObject = game.add.image(x, y, image);
     this.imageObject.setScale(0.8);
     this.imageObject.visible = false;
-    this.contentsSprite = game.add.sprite(this.imageObject.x, this.imageObject.y, 'assets');
+    this.contentsSprite = game.add.sprite(x, y, 'assets');
     this.contentsSprite.setScale(3);
     this.contentsSprite.visible = false;
     this.contents = null;
@@ -18,12 +18,12 @@ class InventorySlot {
     this.imageObject.visible = !this.imageObject.visible;
     this.imageObject.x = this.game.cameras.main.scrollX + this.baseX;
     this.imageObject.y = this.game.cameras.main.scrollY + this.baseY;
-    this._toggleVisibilityOfContents(game);
+    this._toggleVisibilityOfContents();
 
   }
 
   //show/hide image of contents of inventory slot
-  _toggleVisibilityOfContents(visibility) {
+  _toggleVisibilityOfContents() {
     if (this.contents !== null && this.contents !== undefined) {
       //I'm not sure why I have to do this to change the frame but it works
       this.contentsSprite.frame = this.contentsSprite.frame.texture.frames[this.contents.frameNumber];
@@ -50,6 +50,34 @@ class InventorySlot {
   }
 }
 
+class CraftingSlot extends InventorySlot {
+  mouseClick(mouseX, mouseY, inHand) {
+    let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
+    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseY < this.imageObject.y+(this.imageObject.displayHeight/2);
+    if (withinX && withinY) {
+      console.log(this.contents);
+      let temp = this.contents;
+      this.contents = inHand;
+      inHand = temp;
+      if (inHand != null && this.contents != null) {
+        inHand = this.craft(inHand);
+      }
+      this._toggleVisibilityOfContents();
+    }
+    return inHand;
+  }
+  craft(inHand) {
+    for (let i=0; i<ITEMS.length; i++) {
+      if (ITEMS[i].recipe.includes(inHand.name) && ITEMS[i].recipe.includes(this.contents.name)) {
+        inHand = null;
+        this.contents = ITEMS[i];
+        break;
+      }
+    }
+    return inHand;
+  }
+}
+
 //the inventory window
 class Inventory {
   #imageObject; //private attribute storing Phaser image object
@@ -61,9 +89,9 @@ class Inventory {
     this.game = game;
     this.baseX = 500;
     this.baseY = 300;
-    let leftSide = 500 - (this.#imageObject.width/2.5);
-    let topSide = 300 - (this.#imageObject.height/2.5);
-    let xInterval = this.#imageObject.width / (1.1*columns+2);
+    let leftSide = 500 - (this.#imageObject.displayWidth/2);
+    let topSide = 300 - (this.#imageObject.displayHeight/2);
+    let xInterval = this.#imageObject.width / (1.5*columns+2);
     let yInterval = this.#imageObject.height / (1.1*rows+2);
     this.slots = [];
     for (let row = 1; row <= rows; row++) {
@@ -73,6 +101,7 @@ class Inventory {
         this.slots.push(new InventorySlot(x, y, 'inventoryBox', game));
       }
     }
+    this.slots.push(new CraftingSlot(800, 300, 'inventoryBox', game));
   }
 
   //show/hide when E key is pressed
@@ -127,7 +156,8 @@ class Item {
   }
 }
 
-const items = [
-  new Item('Battery', 20, 'TBD'),
-  new Item('Cables', 23, 'TBD')
+const ITEMS = [
+  new Item('Battery', 20, []),
+  new Item('Cables', 23, []),
+  new Item('Radio', 18, ['Battery', 'Cables'])
 ]
