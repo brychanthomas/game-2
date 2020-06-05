@@ -114,6 +114,15 @@ class Inventory {
     }
   }
 
+    addItem(item) {
+      for (let slot of this.slots) {
+        if (slot.contents == null) {
+          slot.contents = item;
+          break;
+        }
+      }
+    }
+
   //return whether or not the inventory window is visible
   isVisible() {
     return this.#imageObject.visible;

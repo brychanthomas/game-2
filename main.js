@@ -53,8 +53,8 @@ function create () {
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
   inventory = new Inventory(4, 6, this);
-  inventory.slots[0].contents = ITEMS[0];
-  inventory.slots[1].contents = ITEMS[1];
+  inventory.addItem(ITEMS[0]);
+  inventory.addItem(ITEMS[1]);
 
   this.input.on('pointerdown', on_click, this);
 
