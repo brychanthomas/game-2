@@ -159,5 +159,6 @@ class Item {
 const ITEMS = [
   new Item('Battery', 20, []),
   new Item('Cables', 23, []),
-  new Item('Radio', 18, ['Battery', 'Cables'])
+  new Item('Radio', 18, ['Battery', 'Cables']),
+  new Item('Lamp', 22, [])
 ]
