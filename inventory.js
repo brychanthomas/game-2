@@ -174,6 +174,7 @@ class DroppedItem {
     this.spriteObject = game.add.sprite(x, y, 'assets');
     this.spriteObject.frame = this.spriteObject.frame.texture.frames[item.frameNumber];
     this.spriteObject.setScale(2);
+    this.spriteObject.depth = 0; //send to back, behind other sprites
   }
 
   //use the game clock to move it up and down in a sine wave pattern
@@ -185,7 +186,7 @@ class DroppedItem {
 
   //get distance between item and specified x and y
   getDistanceTo(x, y) {
-    let distanceToPlayer = (player.x - this.x)**2 + (player.y - this.y)**2
+    let distanceToPlayer = (player.x - this.x)**2 + (player.y - this.y)**2;
     distanceToPlayer = Math.sqrt(distanceToPlayer);
     return distanceToPlayer;
   }
