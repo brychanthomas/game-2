@@ -118,21 +118,24 @@ class Inventory {
     }
   }
 
-    addItem(item) {
-      item = Item.nameToObject(item);
-      for (let slot of this.slots) {
-        if (slot.contents == null) {
-          slot.contents = item;
-          return;
-        }
+  //add an item to an empty inventory slot and return true if there was space
+  addItem(item) {
+    item = Item.nameToObject(item);
+    for (let slot of this.slots) {
+      if (slot.contents == null) {
+        slot.contents = item;
+        return true;
       }
     }
+    return false;
+  }
 
   //return whether or not the inventory window is visible
   isVisible() {
     return this.#imageObject.visible;
   }
 
+  //when mouse clicked
   mouseClick(x, y) {
     if (this.isVisible()) {
       let relX = x + this.game.cameras.main.scrollX;
@@ -180,16 +183,19 @@ class DroppedItem {
     this.spriteObject.y = y;
   }
 
+  //get distance between item and specified x and y
   getDistanceTo(x, y) {
     let distanceToPlayer = (player.x - this.x)**2 + (player.y - this.y)**2
     distanceToPlayer = Math.sqrt(distanceToPlayer);
     return distanceToPlayer;
   }
 
+  //show/hide item
   setVisibility(visible) {
     this.spriteObject.visible = visible;
   }
 
+  //delete sprite of item
   destroy() {
     this.spriteObject.destroy();
   }
@@ -203,20 +209,24 @@ class DroppedItemHandler {
     this.items = [];
   }
 
+  //add a dropped item to be shown
   add(x, y, item) {
     item = Item.nameToObject(item);
     this.items.push(new DroppedItem(item, x, y, this.game));
   }
 
+  //move items up and down each frame, hide them if the inventory is opened and
+  //add them to the inventory if the player is close
   update() {
     let toDelete = [];
     for (let i=0; i<this.items.length; i++) {
       this.items[i].updatePosition();
       this.items[i].setVisibility(!this.inventory.isVisible());
       if (this.items[i].getDistanceTo(this.player.x, this.player.y) < 30) {
-        toDelete.push(i);
-        this.inventory.addItem(this.items[i].item);
-        this.items[i].destroy();
+        if (this.inventory.addItem(this.items[i].item)) {
+          this.items[i].destroy();
+          toDelete.push(i);
+        }
       }
     }
     toDelete.sort().reverse();
@@ -228,6 +238,7 @@ class DroppedItemHandler {
 
 //individual item
 class Item {
+  //convert the name of an item to its object representation
   static nameToObject(name) {
     if (typeof name === "string") {
       let item = ITEMS.find((itm, ind, arr) => itm.name === name);
