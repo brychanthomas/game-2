@@ -186,6 +186,10 @@ class DroppedItem {
     return distanceToPlayer;
   }
 
+  setVisibility(visible) {
+    this.spriteObject.visible = visible;
+  }
+
   destroy() {
     this.spriteObject.destroy();
   }
@@ -208,6 +212,7 @@ class DroppedItemHandler {
     let toDelete = [];
     for (let i=0; i<this.items.length; i++) {
       this.items[i].updatePosition();
+      this.items[i].setVisibility(!this.inventory.isVisible());
       if (this.items[i].getDistanceTo(this.player.x, this.player.y) < 30) {
         toDelete.push(i);
         this.inventory.addItem(this.items[i].item);

@@ -54,11 +54,10 @@ function create () {
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
   inventory = new Inventory(4, 6, this);
-  inventory.addItem('Battery');
-  inventory.addItem('Cables');
 
   droppedHandler = new DroppedItemHandler(player, inventory, this);
-  droppedHandler.add(500, 500, ITEMS[1]);
+  droppedHandler.add(500, 500, 'Battery');
+  droppedHandler.add(600, 400, 'Cables')
 
   this.input.on('pointerdown', on_click, this);
 
