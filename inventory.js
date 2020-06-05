@@ -119,10 +119,7 @@ class Inventory {
   }
 
     addItem(item) {
-      if (typeof item === "string") {
-        item = ITEMS.find((itm, ind, arr) => itm.name === item);
-        if (typeof item === "string") { return }
-      }
+      item = Item.nameToObject(item);
       for (let slot of this.slots) {
         if (slot.contents == null) {
           slot.contents = item;
@@ -203,6 +200,7 @@ class DroppedItemHandler {
   }
 
   add(x, y, item) {
+    item = Item.nameToObject(item);
     this.items.push(new DroppedItem(item, x, y, this.game));
   }
 
@@ -225,6 +223,13 @@ class DroppedItemHandler {
 
 //individual item
 class Item {
+  static nameToObject(name) {
+    if (typeof name === "string") {
+      let item = ITEMS.find((itm, ind, arr) => itm.name === name);
+      return item;
+    }
+    return name;
+  }
   constructor(name, frameNumber, recipe) {
     this.name = name;
     this.frameNumber = frameNumber;
