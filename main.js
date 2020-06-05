@@ -33,6 +33,8 @@ function preload () {
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }
 
+var dropped;
+
 function create () {
 
   this.add.image(1095, 730, 'floor').setScale(2);
@@ -56,6 +58,8 @@ function create () {
   inventory.addItem('Battery');
   inventory.addItem('Cables');
 
+  dropped = new DroppedItem(ITEMS[0], 500, 500, this);
+
   this.input.on('pointerdown', on_click, this);
 
 }
@@ -71,6 +75,7 @@ function update () {
   }
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
+  dropped.update();
 }
 
 //on mouse click for inventory management

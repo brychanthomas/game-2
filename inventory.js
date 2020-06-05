@@ -50,6 +50,8 @@ class InventorySlot {
   }
 }
 
+//special type of inventory slot that allows you to combine two items to make
+//a new item
 class CraftingSlot extends InventorySlot {
   mouseClick(mouseX, mouseY, inHand) {
     let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
@@ -66,6 +68,8 @@ class CraftingSlot extends InventorySlot {
     }
     return inHand;
   }
+
+  //try to combine the item in the player's hand and the content of the slot
   craft(inHand) {
     for (let i=0; i<ITEMS.length; i++) {
       if (ITEMS[i].recipe.includes(inHand.name) && ITEMS[i].recipe.includes(this.contents.name)) {
@@ -157,6 +161,28 @@ class Inventory {
     } else {
       this.inHandSprite.visible = false;
     }
+  }
+}
+
+class DroppedItem {
+  constructor(item, x, y, game) {
+    this.x = x;
+    this.y = y;
+    this.game = game;
+    this.spriteObject = game.add.sprite(x, y, 'assets');
+    this.spriteObject.frame = this.spriteObject.frame.texture.frames[item.frameNumber];
+    this.spriteObject.setScale(2);
+  }
+  update(playerX, playerY) {
+    let y = this.y + 4;
+    y -= 8*  Math.sin(this.game.time.now / 200);
+    this.spriteObject.y = y;
+    let distanceToPlayer = (player.x - this.x)**2 + (player.y - this.y)**2
+    distanceToPlayer = Math.sqrt(distanceToPlayer);
+    if (distanceToPlayer < 30) {
+      return true;
+    }
+    return false;
   }
 }
 
