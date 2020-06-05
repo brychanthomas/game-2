@@ -164,25 +164,62 @@ class Inventory {
   }
 }
 
+//shows a dropped item, moves it up and down and calculates distance to player
 class DroppedItem {
   constructor(item, x, y, game) {
     this.x = x;
     this.y = y;
+    this.item = item;
     this.game = game;
     this.spriteObject = game.add.sprite(x, y, 'assets');
     this.spriteObject.frame = this.spriteObject.frame.texture.frames[item.frameNumber];
     this.spriteObject.setScale(2);
   }
-  update(playerX, playerY) {
+
+  //use the game clock to move it up and down in a sine wave pattern
+  updatePosition(playerX, playerY) {
     let y = this.y + 4;
     y -= 8*  Math.sin(this.game.time.now / 200);
     this.spriteObject.y = y;
+  }
+
+  getDistanceTo(x, y) {
     let distanceToPlayer = (player.x - this.x)**2 + (player.y - this.y)**2
     distanceToPlayer = Math.sqrt(distanceToPlayer);
-    if (distanceToPlayer < 30) {
-      return true;
+    return distanceToPlayer;
+  }
+
+  destroy() {
+    this.spriteObject.destroy();
+  }
+}
+
+class DroppedItemHandler {
+  constructor(player, inventory, game) {
+    this.player = player;
+    this.inventory = inventory;
+    this.game = game;
+    this.items = [];
+  }
+
+  add(x, y, item) {
+    this.items.push(new DroppedItem(item, x, y, this.game));
+  }
+
+  update() {
+    let toDelete = [];
+    for (let i=0; i<this.items.length; i++) {
+      this.items[i].updatePosition();
+      if (this.items[i].getDistanceTo(this.player.x, this.player.y) < 30) {
+        toDelete.push(i);
+        this.inventory.addItem(this.items[i].item);
+        this.items[i].destroy();
+      }
     }
-    return false;
+    toDelete.sort().reverse();
+    for (let index of toDelete) {
+      this.items.splice(index, 1);
+    }
   }
 }
 

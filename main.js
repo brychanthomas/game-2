@@ -23,6 +23,7 @@ var player;
 var inventory;
 var wasdKeys;
 var obstacles;
+var droppedHandler;
 
 function preload () {
 
@@ -32,8 +33,6 @@ function preload () {
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }
-
-var dropped;
 
 function create () {
 
@@ -58,7 +57,8 @@ function create () {
   inventory.addItem('Battery');
   inventory.addItem('Cables');
 
-  dropped = new DroppedItem(ITEMS[0], 500, 500, this);
+  droppedHandler = new DroppedItemHandler(player, inventory, this);
+  droppedHandler.add(500, 500, ITEMS[1]);
 
   this.input.on('pointerdown', on_click, this);
 
@@ -75,7 +75,7 @@ function update () {
   }
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
-  dropped.update();
+  droppedHandler.update();
 }
 
 //on mouse click for inventory management
