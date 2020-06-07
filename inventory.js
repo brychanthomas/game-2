@@ -84,19 +84,17 @@ class CraftingSlot extends InventorySlot {
 
 //the inventory window
 class Inventory {
-  #imageObject; //private attribute storing Phaser image object
-
   constructor(rows, columns, game) {
-    this.#imageObject = game.add.image(500, 300, 'inventoryBack');
-    this.#imageObject.visible = false;
-    this.#imageObject.setScale(0.8);
+    this.imageObject = game.add.image(500, 300, 'inventoryBack');
+    this.imageObject.visible = false;
+    this.imageObject.setScale(0.8);
     this.game = game;
     this.baseX = 500;
     this.baseY = 300;
-    let leftSide = 500 - (this.#imageObject.displayWidth/2);
-    let topSide = 300 - (this.#imageObject.displayHeight/2);
-    let xInterval = this.#imageObject.width / (1.5*columns+2);
-    let yInterval = this.#imageObject.height / (1.1*rows+2);
+    let leftSide = 500 - (this.imageObject.displayWidth/2);
+    let topSide = 300 - (this.imageObject.displayHeight/2);
+    let xInterval = this.imageObject.width / (1.5*columns+2);
+    let yInterval = this.imageObject.height / (1.1*rows+2);
     this.slots = [];
     for (let row = 1; row <= rows; row++) {
       for (let column = 1; column <= columns; column++) {
@@ -110,9 +108,9 @@ class Inventory {
 
   //show/hide when E key is pressed
   toggleVisibility(game) {
-    this.#imageObject.visible = !this.#imageObject.visible;
-    this.#imageObject.x = this.game.cameras.main.scrollX + this.baseX;
-    this.#imageObject.y = this.game.cameras.main.scrollY + this.baseY;
+    this.imageObject.visible = !this.imageObject.visible;
+    this.imageObject.x = this.game.cameras.main.scrollX + this.baseX;
+    this.imageObject.y = this.game.cameras.main.scrollY + this.baseY;
     for (let i=0; i < this.slots.length; i++) {
       this.slots[i].toggleVisibility(game);
     }
@@ -132,7 +130,7 @@ class Inventory {
 
   //return whether or not the inventory window is visible
   isVisible() {
-    return this.#imageObject.visible;
+    return this.imageObject.visible;
   }
 
   //when mouse clicked
@@ -152,14 +150,19 @@ class Inventory {
     if (this.inHandSprite === undefined) {
       this.inHandSprite = this.game.add.sprite(0, 0, 'assets');
       this.inHandSprite.setScale(3);
+      //this.inHandText = this.game.add.text(0, 0, 'Henlo');
     }
     if (this.inHand !== null && this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
       this.inHandSprite.visible = true;
       this.inHandSprite.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
       this.inHandSprite.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY;
+      //this.inHandText.visible = true;
+      //this.inHandText.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
+      //this.inHandText.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY;
     } else {
       this.inHandSprite.visible = false;
+      //this.inHandText.visible = false;
     }
   }
 }
