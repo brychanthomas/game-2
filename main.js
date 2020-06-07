@@ -29,7 +29,7 @@ function preload () {
 
   this.load.image('floor', 'assets/floor.png');
   this.load.image('obstacle','assets/obstacle.png');
-  this.load.spritesheet('assets', 'assets/spritesheet3.png', {frameWidth: 22, frameHeight: 22});
+  this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }

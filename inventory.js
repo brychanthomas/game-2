@@ -261,18 +261,18 @@ class Item {
 
 const ITEMS = [
   new Item('Bin Lid', 27, []),
-  new Item('Pole', 0, []),
+  new Item('Flute', 28, []),
   new Item('Security Camera', 25, []),
   new Item('Record Player', 24, []),
   new Item('Battery', 20, []),
   new Item('Wires', 23, []),
   new Item('TV', 22, []),
   new Item('Calculator', 21, []),
-  new Item('Dish', 0, ['Bin Lid', 'Pole']),
-  new Item('Rotator Thing', 0, ['Security Camera', 'Record Player']),
-  new Item('Motor', 0, ['Battery', 'Wires']),
-  new Item('Computer', 0, ['TV', 'Calculator']),
-  new Item('Satellite Dish', 0, ['Dish', 'Rotator Thing']),
-  new Item('Technical Box', 0, ['Motor', 'Computer']),
+  new Item('Dish', 29, ['Bin Lid', 'Flute']),
+  new Item('Rotator Thing', 30, ['Security Camera', 'Record Player']),
+  new Item('Motor', 32, ['Battery', 'Wires']),
+  new Item('Computer', 31, ['TV', 'Calculator']),
+  new Item('Satellite Dish', 33, ['Dish', 'Rotator Thing']),
+  new Item('Technical Box', 34, ['Motor', 'Computer']),
   new Item('Radio Transmitter', 18, ['Satellite Dish', 'Technical Box'])
 ]
