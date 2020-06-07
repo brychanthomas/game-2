@@ -160,8 +160,8 @@ class Inventory {
       this.inHandSprite.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY;
       this.inHandText.visible = true;
       this.inHandText.text = this.inHand.name;
-      this.inHandText.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
-      this.inHandText.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY + 20;
+      this.inHandText.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX - 10;
+      this.inHandText.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY + 30;
     } else {
       this.inHandSprite.visible = false;
       this.inHandText.visible = false;
