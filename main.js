@@ -61,7 +61,6 @@ function create () {
   }
 
   this.input.on('pointerdown', on_click, this);
-  this.add.text(0, 0, 'Hello World', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 
 }
 

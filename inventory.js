@@ -150,19 +150,21 @@ class Inventory {
     if (this.inHandSprite === undefined) {
       this.inHandSprite = this.game.add.sprite(0, 0, 'assets');
       this.inHandSprite.setScale(3);
-      //this.inHandText = this.game.add.text(0, 0, 'Henlo');
+      this.inHandText = this.game.add.text(0, 0, 'Henlo', {fontSize: '15px', fontFamily: 'Arial'});
+      this.inHandText.setColor('black');
     }
     if (this.inHand !== null && this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
       this.inHandSprite.visible = true;
       this.inHandSprite.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
       this.inHandSprite.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY;
-      //this.inHandText.visible = true;
-      //this.inHandText.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
-      //this.inHandText.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY;
+      this.inHandText.visible = true;
+      this.inHandText.text = this.inHand.name;
+      this.inHandText.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
+      this.inHandText.y = this.game.input.mousePointer.y  + this.game.cameras.main.scrollY + 20;
     } else {
       this.inHandSprite.visible = false;
-      //this.inHandText.visible = false;
+      this.inHandText.visible = false;
     }
   }
 }
