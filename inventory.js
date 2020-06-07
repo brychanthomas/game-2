@@ -260,7 +260,7 @@ class Item {
 }
 
 const ITEMS = [
-  new Item('Bin Lid', 0, []),
+  new Item('Bin Lid', 27, []),
   new Item('Pole', 0, []),
   new Item('Security Camera', 25, []),
   new Item('Record Player', 24, []),

@@ -14,4 +14,4 @@ for item in datas:
         newData.append(item)
 
 img.putdata(newData)
-img.save("spritesheet2.png", "PNG")
+img.save("spritesheet_invisible.png", "PNG")
