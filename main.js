@@ -56,8 +56,9 @@ function create () {
   inventory = new Inventory(4, 6, this);
 
   droppedHandler = new DroppedItemHandler(player, inventory, this);
-  droppedHandler.add(500, 500, 'Battery');
-  droppedHandler.add(600, 400, 'Cables')
+  for (let i=0; i<8; i++) {
+    droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
+  }
 
   this.input.on('pointerdown', on_click, this);
 
