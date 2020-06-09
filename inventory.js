@@ -5,9 +5,11 @@ class InventorySlot {
     this.baseY = y;
     this.imageObject = game.add.image(x, y, image);
     this.imageObject.setScale(0.8);
+    this.imageObject.depth = 21; //ensure it is always on top
     this.imageObject.visible = false;
     this.contentsSprite = game.add.sprite(x, y, 'assets');
     this.contentsSprite.setScale(3);
+    this.contentsSprite.depth = 22;
     this.contentsSprite.visible = false;
     this.contents = null;
     this.game = game;
@@ -88,6 +90,7 @@ class Inventory {
     this.imageObject = game.add.image(500, 300, 'inventoryBack');
     this.imageObject.visible = false;
     this.imageObject.setScale(0.8);
+    this.imageObject.depth = 20; //ensure it is always on top
     this.game = game;
     this.baseX = 500;
     this.baseY = 300;
@@ -150,8 +153,10 @@ class Inventory {
     if (this.inHandSprite === undefined) {
       this.inHandSprite = this.game.add.sprite(0, 0, 'assets');
       this.inHandSprite.setScale(3);
+      this.inHandSprite.depth = 23;
       this.inHandText = this.game.add.text(0, 0, 'Henlo', {fontSize: '15px', fontFamily: 'Arial'});
       this.inHandText.setColor('black');
+      this.inHandText.depth = 24;
     }
     if (this.inHand !== null && this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]

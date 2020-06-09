@@ -44,11 +44,22 @@ class MultiplayerHandler {
       if (message.animation) {
         this.playerSprites[message.id].playAnimation(message.animation);
       }
+      if (message.name) {
+        this.playerSprites[message.id].name = message.name;
+      }
     }
   }
 }
 
 class MultiplayerPlayer extends Player {
+  constructor (game, spritesheet, x, y) {
+    super(game, spritesheet, x, y);
+    this.sprite.destroy();
+    this.sprite = game.add.sprite(x, y, spritesheet);
+    this.sprite.setScale(3);
+    this._initialise_animations();
+  }
+
   update (x, y) {
     this.x = x;
     this.y = y;
