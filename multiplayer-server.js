@@ -10,6 +10,7 @@ wss.on('connection', function connection(ws) {
     message = JSON.parse(message);
     if (message.id && message.x && message.y) {
       var relayed = JSON.stringify({'id':message.id, 'x':message.x, 'y':message.y});
+      console.log(relayed);
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
           client.send(relayed);
@@ -17,6 +18,6 @@ wss.on('connection', function connection(ws) {
       });
     }
   });
-  ws.send('{IDAssign:'+id+'}');
+  ws.send('{"IDAssign":'+id+'}');
   id++;
 });

@@ -24,6 +24,7 @@ var inventory;
 var wasdKeys;
 var obstacles;
 var droppedHandler;
+var multiplayerHandler;
 
 function preload () {
 
@@ -39,6 +40,8 @@ function create () {
   this.add.image(1095, 730, 'floor').setScale(2);
 
   player = new Player(this, 'assets', 300, 300);
+
+  multiplayerHandler = new MultiplayerHandler(player, this);
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
 
@@ -76,6 +79,10 @@ function update () {
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
   droppedHandler.update();
+  
+  if (player.sprite.body.velocity.x !== 0 || player.sprite.body.velocity.y !== 0) {
+    multiplayerHandler.sendPosition();
+  }
 }
 
 //on mouse click for inventory management
