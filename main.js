@@ -67,6 +67,8 @@ function create () {
 
 }
 
+var prevPos = {'x':300, 'y':300};
+var prevAnim;
 function update () {
   if (this.input.keyboard.checkDown(eKey, 500)) {
     inventory.toggleVisibility();
@@ -79,10 +81,15 @@ function update () {
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
   droppedHandler.update();
-  
-  if (player.sprite.body.velocity.x !== 0 || player.sprite.body.velocity.y !== 0) {
+
+  if (Math.abs(player.x - prevPos.x) > 1 || Math.abs(player.y - prevPos.y) > 1) {
     multiplayerHandler.sendPosition();
   }
+  if (player.currentAnimation !== prevAnim) {
+    multiplayerHandler.sendAnimation();
+  }
+  prevPos = {'x':player.x, 'y':player.y};
+  prevAnim = player.currentAnimation;
 }
 
 //on mouse click for inventory management

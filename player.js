@@ -117,9 +117,9 @@ class Player {
 
   //stop animations and movement
   stop() {
-    if(player.sprite.anims.currentAnim !== null) {
-      if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
-        player.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true);
+    if(this.sprite.anims.currentAnim !== null) {
+      if (this.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
+        this.sprite.anims.play(player.sprite.anims.currentAnim.key+'Stop', true);
       }
     }
     this.setVelocity(0,0);
@@ -129,7 +129,23 @@ class Player {
     return this.sprite.x;
   }
 
+  set x(x) {
+    this.sprite.x = x;
+  }
+
   get y() {
     return this.sprite.y;
+  }
+
+  set y(y) {
+    this.sprite.y = y;
+  }
+
+  get currentAnimation() {
+    if (this.sprite.anims.currentAnim !== null) {
+      return this.sprite.anims.currentAnim.key;
+    } else {
+      return undefined;
+    }
   }
 }
