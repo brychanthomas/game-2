@@ -12,7 +12,7 @@ class MultiplayerHandler {
   }
 
   sendPosition() {
-    if (this.playerID) {
+    if (this.playerID !== undefined) {
       var posInfo = {'x':player.x, 'y': player.y, 'id': this.playerID, 'name': this.myname}
       console.log(posInfo);
       this.websocket.send(JSON.stringify(posInfo));
@@ -20,7 +20,7 @@ class MultiplayerHandler {
   }
 
   sendAnimation() {
-    if (this.playerID) {
+    if (this.playerID !== undefined) {
       var animInfo = {'animation': this.player.currentAnimation, 'id': this.playerID}
       console.log(animInfo);
       this.websocket.send(JSON.stringify(animInfo));
