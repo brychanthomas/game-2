@@ -1,11 +1,21 @@
 var multiplayerID;
 
+class Communicator {
+  constructor(address, messageCallback) {
+    this.serverAddress = address;
+    this.websocket = new WebSocket('ws://'+this.serverAddress);
+    this.websocket.onmessage = messageCallback;
+  }
+  send(data) {
+    this.websocket.send(JSON.stringify(data));
+  }
+}
+
 class MultiplayerHandler {
   constructor(player, game) {
     this.myname = prompt("Please enter a username:", "xXShadowLordBladeXx");
-    this.serverAddress = prompt("Please enter the server address:", "109.149.213.37:5000");
-    this.websocket = new WebSocket('ws://'+this.serverAddress);
-    this.websocket.onmessage = function(message) {multiplayerHandler.onMessage(message)};
+    let serverAddress = prompt("Please enter the server address:", "109.149.213.37:5000");
+    this.comm = new Communicator(serverAddress, this.onMessage.bind(this));
     this.player = player;
     this.game = game;
     this.playerSprites = {};
@@ -15,7 +25,7 @@ class MultiplayerHandler {
     if (this.playerID !== undefined) {
       var posInfo = {'x':player.x, 'y': player.y, 'id': this.playerID, 'name': this.myname}
       console.log(posInfo);
-      this.websocket.send(JSON.stringify(posInfo));
+      this.comm.send(posInfo);
     }
   }
 
@@ -23,7 +33,7 @@ class MultiplayerHandler {
     if (this.playerID !== undefined) {
       var animInfo = {'animation': this.player.currentAnimation, 'id': this.playerID}
       console.log(animInfo);
-      this.websocket.send(JSON.stringify(animInfo));
+      this.comm.send(animInfo);
     }
   }
 
