@@ -3,7 +3,7 @@ var multiplayerID;
 class MultiplayerHandler {
   constructor(player, game) {
     this.myname = prompt("Please enter a username:", "xXShadowLordBladeXx");
-    this.serverAddress = prompt("Please enter the server address:", "192.168.1.193:5000");
+    this.serverAddress = prompt("Please enter the server address:", "109.149.213.37:5000");
     this.websocket = new WebSocket('ws://'+this.serverAddress);
     this.websocket.onmessage = function(message) {multiplayerHandler.onMessage(message)};
     this.player = player;
