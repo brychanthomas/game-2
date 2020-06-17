@@ -13,7 +13,7 @@ class Communicator {
 
 class MultiplayerHandler {
   constructor(player, game) {
-    this.myname = prompt("Please enter a username:", "xXShadowLordBladeXx");
+    this.myname = prompt("Please enter a username:", "");
     let serverAddress = prompt("Please enter the server address:", "109.149.213.37:5000");
     this.comm = new Communicator(serverAddress, this.onMessage.bind(this));
     this.player = player;
