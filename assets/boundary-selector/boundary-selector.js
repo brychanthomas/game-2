@@ -13,13 +13,13 @@ class Region {
 
   //draw the shape on the canvas
   display() {
-    stroke([204, 0, 255]);
-    strokeWeight(3);
-    fill([255,0,0,128]);
+    stroke([204, 0, 255, 100]);
+    strokeWeight(2);
+    fill([255,0,0,70]);
     beginShape();
     for (let i=0; i<this.vertices.length; i++) {
       vertex(this.vertices[i].x, this.vertices[i].y);
-      circle(this.vertices[i].x, this.vertices[i].y, 15);
+      circle(this.vertices[i].x, this.vertices[i].y, 8);
     }
     vertex(this.vertices[0].x, this.vertices[0].y)
     endShape();
@@ -55,13 +55,19 @@ function preload() {
   img = loadImage('../Perlin.png');
 }
 
+var copyButton;
 function setup() {
-  createCanvas(img.width, img.height);
+  createCanvas(img.width+100, img.height);
+  pixelDensity(3);
+
+  copyButton = createButton('Copy bounds<br>to clipboard');
+  copyButton.position(img.width+10, 50);
+  copyButton.mousePressed(copyJSON);
 
 }
 
 function draw() {
-  background(0);
+  background(255);
   image(img, 0, 0);
   shapes.forEach(function(region) {
     region.display();
@@ -89,4 +95,22 @@ function drag() {
     i++;
     console.log(i);
   }
+}
+
+function copyJSON() {
+
+  var el = document.createElement('textarea');
+// Set value (string to be copied)
+  el.value = JSON.stringify(shapes);
+  // Set non-editable to avoid focus and move outside of view
+  el.setAttribute('readonly', '');
+  el.style = {position: 'absolute', left: '-9999px'};
+  document.body.appendChild(el);
+  // Select text inside element
+  el.select();
+  // Copy text to clipboard
+  document.execCommand('copy');
+  // Remove temporary element
+  document.body.removeChild(el);
+
 }
