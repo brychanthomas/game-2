@@ -1,15 +1,19 @@
 <head>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
 <script>
+
+var xInc = 0;
+var yInc = 0;
+
 function setup() {
   createCanvas(800, 600);
 }
 
 function draw() {
-  background(240);
   for (let x = 0; x<800; x++) {
     for (let y = 0; y<600; y++) {
-      let perlinNoise = noise(x/100, y/100);
+      set(x, y, 240)
+      let perlinNoise = noise(x/100 + xInc, y/100 + yInc);
       if (perlinNoise > 0.7) {
         set(x, y, 100);
       } else if (perlinNoise > 0.65) {
@@ -20,8 +24,26 @@ function draw() {
   updatePixels();
   noLoop();
 }
-function mouseClicked() {
-  saveCanvas('Perlin', 'png');
+
+function keyPressed() {
+  if (key === 's') {
+    saveCanvas('Perlin', 'png');
+  }
+  switch(keyCode) {
+    case LEFT_ARROW:
+      xInc -= 1; break;
+    case RIGHT_ARROW:
+      xInc += 1; break;
+    case UP_ARROW:
+      yInc -= 1; break;
+    case DOWN_ARROW:
+      yInc += 1; break;
+    case ENTER:
+      xInc += 1000;
+      yInc += 1000;
+      break;
+  }
+  redraw();
 }
 </script>
 
