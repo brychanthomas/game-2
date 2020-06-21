@@ -4,7 +4,10 @@ class Region {
     this.vertices = [];
     let r = 20;
     for (let i = 0; i < sides; i++) {
-      this.vertices.push(createVector(x + r * Math.cos(2 * Math.PI * i / sides), y + r * Math.sin(2 * Math.PI * i / sides)));
+      this.vertices.push({
+        'x':x + r * Math.cos(2 * Math.PI * i / sides),
+        'y':y + r * Math.sin(2 * Math.PI * i / sides)
+      });
     }
   }
 
@@ -25,14 +28,23 @@ class Region {
   //checks if vertex is close to mouse and moves it if it is, returning true
   //if no vertex close to mouse, returns false
   drag(x, y) {
+    let minDist = Infinity;
+    let closestVertex;
     for (let i=0; i<this.vertices.length; i++) {
-      if (dist(this.vertices[i].x, this.vertices[i].y, x, y) < 30) {
-        this.vertices[i].x = x;
-        this.vertices[i].y = y;
-        return true;
+      //BROKEN
+      let distance = dist(this.vertices[i].x, this.vertices[i].y, x, y);
+      if (distance < 15 && distance < minDist) {
+        minDist = distance;
+        closestVertex = i;
       }
     }
-    return false;
+    if (closestVertex !== undefined) {
+      this.vertices[closestVertex].x = x;
+      this.vertices[closestVertex].y = y;
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
