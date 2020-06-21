@@ -34,14 +34,14 @@ def writeGridToFile(img, grid):
         for x in range(img.size[0]):
             newData.append(grid[y][x].convertToRGB())
     img.putdata(newData)
-    img.save("test.png", "PNG")
+    img.save("CA.png", "PNG")
 
 def initialiseGrid(size):
     grid = []
     for y in range(size[1]):
         grid.append([])
         for x in range(size[0]):
-            if random.random() < 0.0015: grid[y].append(Cell(2))
+            if random.random() < 0.0001: grid[y].append(Cell(2))
             else: grid[y].append(Cell(0))
     return grid
 
@@ -50,15 +50,16 @@ GRAD_COL    = (220, 220, 220)
 SPREAD_COL  = (100, 100, 100)
 CONSUME_PROB = 0.3
 
-WIDTH = 150
-HEIGHT = 100
-GENERATIONS = 20
+WIDTH = 800
+HEIGHT = 600
+GENERATIONS = 60
 
 img = Image.new('RGB', [WIDTH,HEIGHT], 255)
 
 grid = initialiseGrid([WIDTH,HEIGHT])
 
-for i in range(GENERATIONS):
+for g in range(GENERATIONS):
+    print("Gen", g)
     for x in range(WIDTH):
         for y in range(HEIGHT):
             upState = grid[y-1][x].state

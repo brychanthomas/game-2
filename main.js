@@ -27,7 +27,7 @@ var droppedHandler;
 
 function preload () {
 
-  this.load.image('floor', 'assets/floor.png');
+  this.load.image('floor', 'assets/CA.png');
   this.load.image('obstacle','assets/obstacle.png');
   this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
@@ -36,7 +36,7 @@ function preload () {
 
 function create () {
 
-  this.add.image(1095, 730, 'floor').setScale(2);
+  this.add.image(1200, 900, 'floor').setScale(3);
 
   player = new Player(this, 'assets', 300, 300);
 
@@ -50,7 +50,7 @@ function create () {
   }
   eKey = this.input.keyboard.addKey('E');
 
-  this.cameras.main.setBounds(0, 0, 2190, 1460);
+  this.cameras.main.setBounds(0, 0, 2400, 1800);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
   inventory = new Inventory(4, 6, this);

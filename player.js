@@ -92,7 +92,7 @@ class Player {
       this.sprite.anims.play('left', true);
       this.change_bounding_box('side');
     }
-    else if (cursors.d.isDown && this.x < 2190) {
+    else if (cursors.d.isDown && this.x < 2400) {
       this.setVelocity(3, 0);
       this.sprite.anims.play('right', true);
       this.change_bounding_box('side');
@@ -103,7 +103,7 @@ class Player {
         this.sprite.anims.play('up', true);
         this.change_bounding_box('top');
       }
-      else if (cursors.s.isDown && this.y < 1460) {
+      else if (cursors.s.isDown && this.y < 1800) {
         this.setVelocity(0, 3);
         this.sprite.anims.play('down', true);
         this.change_bounding_box('top');
