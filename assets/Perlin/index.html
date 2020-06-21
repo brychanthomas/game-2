@@ -14,8 +14,8 @@ function draw() {
   for (let x = 0; x<800; x++) {
     for (let y = 0; y<600; y++) {
       let perlinNoise = noise((x+xInc)/100, (y+yInc)/100);
-      let perlinNoise2 = noise((x+xInc+1000)/80, (y+yInc+1000)/80);
-      perlinNoise2 = map(perlinNoise2, 0, 1, -50, 100);
+      let perlinNoise2 = noise((x+xInc+1000)/40, (y+yInc+1000)/40);
+      perlinNoise2 = map(perlinNoise2, 0, 1, -40, 40);
       if (perlinNoise > 0.7) {
         set(x, y, 100+perlinNoise2);
       } else if (perlinNoise > 0.65) {
