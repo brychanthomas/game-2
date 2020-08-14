@@ -6,7 +6,7 @@ var config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: false,
+      debug: true,
       gravity: {x:0, y:0}
     }
   },
@@ -27,7 +27,7 @@ var droppedHandler;
 
 function preload () {
 
-  this.load.image('floor', 'assets/Perlin.png');
+  this.load.image('floor', 'assets/ground_floor_school_house.png');
   this.load.image('obstacle','assets/obstacle.png');
   this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
@@ -36,7 +36,8 @@ function preload () {
 
 function create () {
 
-  this.add.image(1200, 900, 'floor').setScale(3);
+  var floor = this.add.image(1200, 900, 'floor').setScale(14);
+  floor.angle = 0;
 
   player = new Player(this, 'assets', 300, 300);
 

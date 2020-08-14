@@ -2,7 +2,7 @@
 class Player {
   constructor (game, spritesheet, x, y) {
     this.sprite = game.matter.add.sprite(x, y, spritesheet);
-    this.sprite.setScale(3);
+    this.sprite.setScale(6);
     this.game = game;
     this._initialise_animations();
   }
@@ -65,46 +65,46 @@ class Player {
   //they are facing
   change_bounding_box(direction) {
     if (direction === 'side') {
-      this.sprite.body.vertices[0].x = this.sprite.x - 12;
-      this.sprite.body.vertices[0].y = this.sprite.y - 25;
-      this.sprite.body.vertices[1].x = this.sprite.x + 12;
-      this.sprite.body.vertices[1].y = this.sprite.y - 25;
-      this.sprite.body.vertices[2].x = this.sprite.x + 12;
-      this.sprite.body.vertices[2].y = this.sprite.y + 30;
-      this.sprite.body.vertices[3].x = this.sprite.x - 12;
-      this.sprite.body.vertices[3].y = this.sprite.y + 30;
+      this.sprite.body.vertices[0].x = this.sprite.x - 20;
+      this.sprite.body.vertices[0].y = this.sprite.y - 50;
+      this.sprite.body.vertices[1].x = this.sprite.x + 24;
+      this.sprite.body.vertices[1].y = this.sprite.y - 50;
+      this.sprite.body.vertices[2].x = this.sprite.x + 24;
+      this.sprite.body.vertices[2].y = this.sprite.y + 60;
+      this.sprite.body.vertices[3].x = this.sprite.x - 20;
+      this.sprite.body.vertices[3].y = this.sprite.y + 60;
     } else {
-      this.sprite.body.vertices[0].x = this.sprite.x - 15;
-      this.sprite.body.vertices[0].y = this.sprite.y - 24;
-      this.sprite.body.vertices[1].x = this.sprite.x + 18;
-      this.sprite.body.vertices[1].y = this.sprite.y - 24;
-      this.sprite.body.vertices[2].x = this.sprite.x + 18;
-      this.sprite.body.vertices[2].y = this.sprite.y + 30;
-      this.sprite.body.vertices[3].x = this.sprite.x - 14;
-      this.sprite.body.vertices[3].y = this.sprite.y + 30;
+      this.sprite.body.vertices[0].x = this.sprite.x - 30;
+      this.sprite.body.vertices[0].y = this.sprite.y - 48;
+      this.sprite.body.vertices[1].x = this.sprite.x + 36;
+      this.sprite.body.vertices[1].y = this.sprite.y - 48;
+      this.sprite.body.vertices[2].x = this.sprite.x + 36;
+      this.sprite.body.vertices[2].y = this.sprite.y + 60;
+      this.sprite.body.vertices[3].x = this.sprite.x - 28;
+      this.sprite.body.vertices[3].y = this.sprite.y + 60;
     }
   }
 
   //move and set animations
   update(cursors) {
     if (cursors.a.isDown && this.x > 0) {
-      this.setVelocity(-3, 0);
+      this.setVelocity(-6, 0);
       this.sprite.anims.play('left', true);
       this.change_bounding_box('side');
     }
     else if (cursors.d.isDown && this.x < 2400) {
-      this.setVelocity(3, 0);
+      this.setVelocity(6, 0);
       this.sprite.anims.play('right', true);
       this.change_bounding_box('side');
     }
     else {
       if (cursors.w.isDown && this.y > 0){
-        this.setVelocity(0, -3);
+        this.setVelocity(0, -6);
         this.sprite.anims.play('up', true);
         this.change_bounding_box('top');
       }
       else if (cursors.s.isDown && this.y < 1800) {
-        this.setVelocity(0, 3);
+        this.setVelocity(0, 6);
         this.sprite.anims.play('down', true);
         this.change_bounding_box('top');
       }
