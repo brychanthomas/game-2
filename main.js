@@ -33,14 +33,18 @@ function preload () {
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }
 
+var xLimit, yLimit;
+
 function create () {
 
-  var floor = this.add.image(1200, 900, 'floor').setScale(14);
+  var floor = this.add.image(0, 0, 'floor').setScale(14);
   floor.angle = 0;
   floor.x = floor.displayWidth/2;
   floor.y = floor.displayHeight/2;
+  xLimit = floor.displayWidth;
+  yLimit = floor.displayHeight;
 
-  player = new Player(this, 'assets', 300, 300);
+  player = new Player(this, 'assets', 600, 2000);
 
   this.matter.add.image(300, 200, 'obstacle').setStatic(true);
 
@@ -52,15 +56,15 @@ function create () {
   }
   eKey = this.input.keyboard.addKey('E');
 
-  this.cameras.main.setBounds(0, 0, 2400, 1800);
+  this.cameras.main.setBounds(0, 0, xLimit, yLimit);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
   inventory = new Inventory(4, 6, this);
 
   droppedHandler = new DroppedItemHandler(player, inventory, this);
-  for (let i=0; i<8; i++) {
-    droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
-  }
+  //for (let i=0; i<8; i++) {
+  //  droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
+  //}
 
   this.input.on('pointerdown', on_click, this);
 
