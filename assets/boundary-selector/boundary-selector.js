@@ -33,7 +33,7 @@ class Region {
     for (let i=0; i<this.vertices.length; i++) {
       //BROKEN
       let distance = dist(this.vertices[i].x, this.vertices[i].y, x, y);
-      if (distance < 15 && distance < minDist) {
+      if (distance < 5 && distance < minDist) {
         minDist = distance;
         closestVertex = i;
       }
@@ -52,23 +52,23 @@ var img;
 var shapes = [];
 
 function preload() {
-  img = loadImage('../Perlin.png');
+  img = loadImage('../ground_floor_school_house.png');
 }
 
 var copyButton;
 function setup() {
-  createCanvas(img.width+100, img.height);
-  pixelDensity(3);
+  createCanvas((img.width*4)+100, (img.height*4));
+  pixelDensity(14/4);
 
   copyButton = createButton('Copy bounds<br>to clipboard');
-  copyButton.position(img.width+10, 50);
+  copyButton.position((img.width*4)+10, 50);
   copyButton.mousePressed(copyJSON);
 
 }
 
 function draw() {
   background(255);
-  image(img, 0, 0);
+  image(img, 0, 0, img.width*4, img.height*4);
   shapes.forEach(function(region) {
     region.display();
   });

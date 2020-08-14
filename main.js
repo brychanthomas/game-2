@@ -22,7 +22,6 @@ var game = new Phaser.Game(config);
 var player;
 var inventory;
 var wasdKeys;
-var obstacles;
 var droppedHandler;
 
 function preload () {
@@ -38,6 +37,8 @@ function create () {
 
   var floor = this.add.image(1200, 900, 'floor').setScale(14);
   floor.angle = 0;
+  floor.x = floor.displayWidth/2;
+  floor.y = floor.displayHeight/2;
 
   player = new Player(this, 'assets', 300, 300);
 
