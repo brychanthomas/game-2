@@ -64,9 +64,11 @@ class FloorManager {
     var y = this.player.y + 60;
     var upMainStairway = (x > 1670 && x < 1790) && (y > 1280 && y < 1390);
     var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1500);
-    if (upMainStairway) {
+    var upSecondStairway = (x > 3410 && x < 3520) && (y > 1660 && y < 1840);
+    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1790 && y < 1840);
+    if (upMainStairway || upSecondStairway) {
       this.moveUp();
-    } else if (downMainStairway) {
+    } else if (downMainStairway || downSecondStairway) {
       this.moveDown();
     }
   }
@@ -74,9 +76,13 @@ class FloorManager {
   moveUp() {
     if (this.floor < 1) {
       this.floor++;
-      player.x = 1530;
-      player.y = 1540;
-      player.direction = 'down';
+      if (this.player.x < 2750) {
+        this.player.x = 1540;
+        this.player.y = 1540;
+      } else {
+        this.player.x = 3150;
+        this.player.y = 1770;
+      }
       this.loadFloor();
     }
   }
@@ -84,9 +90,13 @@ class FloorManager {
   moveDown() {
     if (this.floor > 0) {
       this.floor--;
-      player.x = 1550;
-      player.y = 1540;
-      player.direction = 'down';
+      if (this.player.x < 2750) {
+        this.player.x = 1540;
+        this.player.y = 1540;
+      } else {
+        this.player.x = 3150;
+        this.player.y = 1770;
+      }
       this.loadFloor();
     }
   }
