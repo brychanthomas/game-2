@@ -14,11 +14,11 @@ class Barriers {
       console.log(vertStr);
       //var verts = this.game.matter.verts.fromPath(vertStr);
       var originalMidpoint = this._calc_average(b['vertices']);
-      var body = this.game.matter.add.fromVertices(0,0, vertStr);
+      var body = this.game.matter.add.fromVertices(-1000,-1000, vertStr);
       body.isStatic = true;
       var processedMidpoint = this._calc_average(body.vertices);
-      var newX = originalMidpoint.x - processedMidpoint.x;
-      var newY = originalMidpoint.y - processedMidpoint.y;
+      var newX = originalMidpoint.x - (processedMidpoint.x+1000);
+      var newY = originalMidpoint.y - (processedMidpoint.y+1000);
       console.log(body)
       //body.destroy();
       var newBody = this.game.matter.add.fromVertices(newX, newY, vertStr);
@@ -32,7 +32,7 @@ class Barriers {
     //console.log(this.game.matter);
   }
 
-  destroy_barriers() {
+  set_floor(floor) {
 
   }
 
@@ -58,7 +58,7 @@ var config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: true,
+      debug: false,
       gravity: {x:0, y:0}
     }
   },
@@ -113,7 +113,7 @@ function create () {
   this.cameras.main.setBounds(0, 0, xLimit, yLimit);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
-  this.cameras.main.setBackgroundColor('#99ff66');
+  this.cameras.main.setBackgroundColor('#a6a6a6');
 
   inventory = new Inventory(4, 6, this);
   droppedHandler = new DroppedItemHandler(player, inventory, this);
@@ -123,7 +123,7 @@ function create () {
 
   this.input.on('pointerdown', on_click, this);
 
-  var barriers = new Barriers(this, floor0_boundaries_test);
+  var barriers = new Barriers(this, floor0_boundaries);
 
 }
 
@@ -139,6 +139,7 @@ function update () {
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
   droppedHandler.update();
+  //this.cameras.main.shake(1000);
 }
 
 //on mouse click for inventory management

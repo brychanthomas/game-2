@@ -17,12 +17,12 @@ class Region {
   //draw the shape on the canvas
   display() {
     stroke([204, 0, 255, 100]);
-    strokeWeight(2);
+    strokeWeight(1);
     fill([255,0,0,70]);
     beginShape();
     for (let i=0; i<this.vertices.length; i++) {
       vertex(this.vertices[i].x/DIVIDER, this.vertices[i].y/DIVIDER);
-      circle(this.vertices[i].x/DIVIDER, this.vertices[i].y/DIVIDER, 5);
+      circle(this.vertices[i].x/DIVIDER, this.vertices[i].y/DIVIDER, 3);
     }
     vertex(this.vertices[0].x/DIVIDER, this.vertices[0].y/DIVIDER)
     endShape();
