@@ -1,6 +1,7 @@
 class Barriers {
   constructor(game, barrierArray) {
     this.game = game;
+    this.sprites = [];
     this.add_barriers(barrierArray);
   }
 
@@ -11,29 +12,29 @@ class Barriers {
         vertStr += Math.round(vert.x) + ' ' + Math.round(vert.y) + ' '
       }
       vertStr = vertStr.slice(0, -1);
-      console.log(vertStr);
-      //var verts = this.game.matter.verts.fromPath(vertStr);
+      var verts = this.game.matter.verts.fromPath(vertStr);
       var originalMidpoint = this._calc_average(b['vertices']);
-      var body = this.game.matter.add.fromVertices(-1000,-1000, vertStr);
+      var body = this.game.matter.bodies.fromVertices(-1000,-1000, verts);
       body.isStatic = true;
       var processedMidpoint = this._calc_average(body.vertices);
       var newX = originalMidpoint.x - (processedMidpoint.x+1000);
       var newY = originalMidpoint.y - (processedMidpoint.y+1000);
-      console.log(body)
-      //body.destroy();
-      var newBody = this.game.matter.add.fromVertices(newX, newY, vertStr);
+      var newBody = this.game.matter.bodies.fromVertices(newX, newY, verts);
       newBody.isStatic = true;
-       // for (var v of body.vertices) {
-       //   v.x += midpoint.x;
-       //   v.y += midpoint.y;
-       // }
-      //this.game.matter.world.add(body);
+      var sprite = this.game.matter.add.sprite(newX, newY);
+      sprite.setExistingBody(newBody);
+      console.log(sprite);
+      this.sprites.push(sprite);
     }
-    //console.log(this.game.matter);
+    console.log(this.game);
+    //console.log(this.game.matter.world);
   }
 
-  set_floor(floor) {
-
+  remove_barriers() {
+    for (var sprite of this.sprites) {
+      sprite.destroy();
+    }
+    this.bodyIDs = [];
   }
 
   //this is where the problem lies - I am calculating the midpoint
@@ -58,7 +59,7 @@ var config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: false,
+      debug: true,
       gravity: {x:0, y:0}
     }
   },
@@ -75,8 +76,8 @@ var player;
 var inventory;
 var wasdKeys;
 var droppedHandler;
+var barriers;
 
-var o;
 
 function preload () {
 
@@ -100,7 +101,7 @@ function create () {
 
   player = new Player(this, 'assets', 600, 2000);
 
-  o=this.matter.add.image(300, 200, 'obstacle').setStatic(true);
+  this.matter.add.image(300, 200, 'obstacle').setStatic(true);
 
   wasdKeys = {
     'w': this.input.keyboard.addKey('W'),
@@ -123,7 +124,7 @@ function create () {
 
   this.input.on('pointerdown', on_click, this);
 
-  var barriers = new Barriers(this, floor0_boundaries);
+  barriers = new Barriers(this, floor0_boundaries);
 
 }
 
@@ -139,6 +140,11 @@ function update () {
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
   droppedHandler.update();
+  // if (player.x < 2750) {
+  //   this.cameras.main.setBounds(0, 1220, xLimit, 1240);
+  // } else {
+  //   this.cameras.main.setBounds(2580, 0, xLimit-2580, yLimit);
+  // }
   //this.cameras.main.shake(1000);
 }
 
