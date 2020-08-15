@@ -117,7 +117,7 @@ var config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: true,
+      debug: false,
       gravity: {x:0, y:0}
     }
   },
