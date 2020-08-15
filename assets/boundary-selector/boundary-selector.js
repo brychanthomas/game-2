@@ -33,7 +33,7 @@ class Region {
     for (let i=0; i<this.vertices.length; i++) {
       //BROKEN
       let distance = dist(this.vertices[i].x, this.vertices[i].y, x, y);
-      if (distance < 5 && distance < minDist) {
+      if (distance < 10 && distance < minDist) {
         minDist = distance;
         closestVertex = i;
       }

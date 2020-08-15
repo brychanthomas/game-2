@@ -12,16 +12,22 @@ class Barriers {
       }
       vertStr = vertStr.slice(0, -1);
       console.log(vertStr);
-      var verts = this.game.matter.verts.fromPath(vertStr);
-      var midpoint = this._calc_average(b['vertices']);
-      var body = this.game.matter.bodies.fromVertices(midpoint.x, midpoint.y, verts);
+      //var verts = this.game.matter.verts.fromPath(vertStr);
+      var originalMidpoint = this._calc_average(b['vertices']);
+      var body = this.game.matter.add.fromVertices(0,0, vertStr);
       body.isStatic = true;
+      var processedMidpoint = this._calc_average(body.vertices);
+      var newX = originalMidpoint.x - processedMidpoint.x;
+      var newY = originalMidpoint.y - processedMidpoint.y;
       console.log(body)
+      //body.destroy();
+      var newBody = this.game.matter.add.fromVertices(newX, newY, vertStr);
+      newBody.isStatic = true;
        // for (var v of body.vertices) {
        //   v.x += midpoint.x;
        //   v.y += midpoint.y;
        // }
-      this.game.matter.world.add(body);
+      //this.game.matter.world.add(body);
     }
     //console.log(this.game.matter);
   }
@@ -30,14 +36,17 @@ class Barriers {
 
   }
 
+  //this is where the problem lies - I am calculating the midpoint
+  //by averaging x and y for all vertices. However, this technique only
+  //works for regular shapes, and these shapes ain't regular mate.
+  //perhaps finding the max and min ys and xs and then averaging them will work?
+  //good luck, you're gonna need it.
   _calc_average(vertices) {
-    var x = 0;
-    var y = 0;
-    for (var v of vertices) {
-      x += Math.round(v.x);
-      y += Math.round(v.y);
-    }
-    return {'x': x/vertices.length, 'y': y/vertices.length};
+    var maxX = Math.max.apply(Math, vertices.map((o) => o.x));
+    var minX = Math.min.apply(Math, vertices.map((o) => o.x));
+    var maxY = Math.max.apply(Math, vertices.map((o) => o.y));
+    var minY = Math.min.apply(Math, vertices.map((o) => o.y));
+    return {'x': (maxX+minX)/2, 'y': (maxY+minY)/2};
   }
 }
 
@@ -49,7 +58,7 @@ var config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: true,
+      debug: false,
       gravity: {x:0, y:0}
     }
   },
@@ -104,8 +113,9 @@ function create () {
   this.cameras.main.setBounds(0, 0, xLimit, yLimit);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
-  inventory = new Inventory(4, 6, this);
+  this.cameras.main.setBackgroundColor('#99ff66');
 
+  inventory = new Inventory(4, 6, this);
   droppedHandler = new DroppedItemHandler(player, inventory, this);
   //for (let i=0; i<8; i++) {
   //  droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
