@@ -5,6 +5,7 @@ class Player {
     this.sprite.setScale(6);
     this.game = game;
     this._initialise_animations();
+    this.disableMovement = false;
   }
 
   //create all of the animations for the player
@@ -87,30 +88,34 @@ class Player {
 
   //move and set animations
   update(cursors) {
-    if (cursors.a.isDown && this.x > 0) {
-      this.setVelocity(-6, 0);
-      this.sprite.anims.play('left', true);
-      this.change_bounding_box('side');
-    }
-    else if (cursors.d.isDown && this.x < xLimit) {
-      this.setVelocity(6, 0);
-      this.sprite.anims.play('right', true);
-      this.change_bounding_box('side');
-    }
-    else {
-      if (cursors.w.isDown && this.y > 0){
-        this.setVelocity(0, -6);
-        this.sprite.anims.play('up', true);
-        this.change_bounding_box('top');
+    if (!this.disableMovement) {
+      if (cursors.a.isDown && this.x > 0) {
+        this.setVelocity(-6, 0);
+        this.sprite.anims.play('left', true);
+        this.change_bounding_box('side');
       }
-      else if (cursors.s.isDown && this.y < yLimit) {
-        this.setVelocity(0, 6);
-        this.sprite.anims.play('down', true);
-        this.change_bounding_box('top');
+      else if (cursors.d.isDown && this.x < xLimit) {
+        this.setVelocity(6, 0);
+        this.sprite.anims.play('right', true);
+        this.change_bounding_box('side');
       }
       else {
-        this.stop();
+        if (cursors.w.isDown && this.y > 0){
+          this.setVelocity(0, -6);
+          this.sprite.anims.play('up', true);
+          this.change_bounding_box('top');
+        }
+        else if (cursors.s.isDown && this.y < yLimit) {
+          this.setVelocity(0, 6);
+          this.sprite.anims.play('down', true);
+          this.change_bounding_box('top');
+        }
+        else {
+          this.stop();
+        }
       }
+    } else {
+      this.stop();
     }
     this.sprite.setAngle(0);
   }

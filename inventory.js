@@ -252,6 +252,7 @@ class Item {
     }
     return name;
   }
+  
   constructor(name, frameNumber, recipe) {
     this.name = name;
     this.frameNumber = frameNumber;

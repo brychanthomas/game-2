@@ -1,3 +1,5 @@
+//loads and removes barriers in the game (walls, furniture etc) as
+//static sprites
 class Barriers {
   constructor(game, barrierArray) {
     this.game = game;
@@ -5,6 +7,8 @@ class Barriers {
     this.addBarriers(barrierArray);
   }
 
+  //take a an array of barriers produced by boundary-selector and
+  //add barriers to the world accordingly
   addBarriers(barrierArray) {
     for (var b of barrierArray) {
       var vertStr = ''
@@ -27,6 +31,7 @@ class Barriers {
     }
   }
 
+  //remove all of the barriers that currently exist
   removeBarriers() {
     for (var sprite of this.sprites) {
       sprite.destroy();
@@ -34,11 +39,7 @@ class Barriers {
     this.bodyIDs = [];
   }
 
-  //this is where the problem lies - I am calculating the midpoint
-  //by averaging x and y for all vertices. However, this technique only
-  //works for regular shapes, and these shapes ain't regular mate.
-  //perhaps finding the max and min ys and xs and then averaging them will work?
-  //good luck, you're gonna need it.
+  //calculate the midpoint of a set of vertices
   _calcAverage(vertices) {
     var maxX = Math.max.apply(Math, vertices.map((o) => o.x));
     var minX = Math.min.apply(Math, vertices.map((o) => o.x));
@@ -48,6 +49,8 @@ class Barriers {
   }
 }
 
+//manages changing the floor and boundaries for the floor the player
+//is on as well as allowing them to move up and down via stairs
 class FloorManager {
   constructor(boundary_defs, floorImage, player, game) {
     this.game = game;
@@ -59,48 +62,53 @@ class FloorManager {
     this.boundaryDefinitions = boundary_defs;
   }
 
+  //check if player is in stairway and move them up/down if they are
   update() {
     var x = this.player.x;
     var y = this.player.y + 60;
     var upMainStairway = (x > 1670 && x < 1790) && (y > 1280 && y < 1390);
     var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1500);
     var upSecondStairway = (x > 3410 && x < 3520) && (y > 1660 && y < 1840);
-    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1760 && y < 1840);
+    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1780 && y < 1840);
     if (upMainStairway || upSecondStairway) {
-      this.moveUp();
+      this.changeFloor(+1);
     } else if (downMainStairway || downSecondStairway) {
-      this.moveDown();
+      this.changeFloor(-1);
     }
   }
 
-  moveUp() {
-    if (this.floor < 1) {
-      this.floor++;
-      if (this.player.x < 2750) {
-        this.player.x = 1540;
-        this.player.y = 1540;
-      } else {
-        this.player.x = 3150;
-        this.player.y = 1770;
-      }
-      this.loadFloor();
-    }
+  //move the player up or down a specific number of floors
+  changeFloor(change) {
+    if (this.floor+change >= 0 && this.floor+change <= 1) {
+      this.floor += change;
+      this.player.disableMovement = true;
+
+      this.game.cameras.main.fadeOut(200, 0, 0, 0);
+      this.game.cameras.main.once('camerafadeoutcomplete', function (camera) {
+
+        if (this.player.x < 2750) {
+          this.player.x = 1540;
+          this.player.y = 1540;
+          this.player.direction = 'down';
+        } else {
+          this.player.x = 3150;
+          this.player.y = 1730;
+          this.player.direction = 'left';
+        }
+        this.loadFloor();
+
+        camera.fadeIn(1000, 0, 0, 0);
+        this.game.cameras.main.once('camerafadeincomplete', function (camera) {
+          this.player.disableMovement = false;
+        }, this);
+    }, this);
+
   }
 
-  moveDown() {
-    if (this.floor > 0) {
-      this.floor--;
-      if (this.player.x < 2750) {
-        this.player.x = 1540;
-        this.player.y = 1540;
-      } else {
-        this.player.x = 3150;
-        this.player.y = 1770;
-      }
-      this.loadFloor();
-    }
   }
 
+  //load the current floor by replacing the barriers and setting the correct
+  //floor texture
   loadFloor() {
     this.barriers.removeBarriers();
     this.barriers.addBarriers(this.boundaryDefinitions[this.floor]);
@@ -151,7 +159,6 @@ var xLimit, yLimit;
 function create () {
 
   var floor = this.add.image(0, 0, 'floor0').setScale(14);
-  //floor.setTexture('floor0');
   floor.angle = 0;
   floor.x = floor.displayWidth/2;
   floor.y = floor.displayHeight/2;
