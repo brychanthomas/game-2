@@ -2,10 +2,10 @@ class Barriers {
   constructor(game, barrierArray) {
     this.game = game;
     this.sprites = [];
-    this.add_barriers(barrierArray);
+    this.addBarriers(barrierArray);
   }
 
-  add_barriers(barrierArray) {
+  addBarriers(barrierArray) {
     for (var b of barrierArray) {
       var vertStr = ''
       for (var vert of b['vertices']) {
@@ -13,24 +13,21 @@ class Barriers {
       }
       vertStr = vertStr.slice(0, -1);
       var verts = this.game.matter.verts.fromPath(vertStr);
-      var originalMidpoint = this._calc_average(b['vertices']);
+      var originalMidpoint = this._calcAverage(b['vertices']);
       var body = this.game.matter.bodies.fromVertices(-1000,-1000, verts);
       body.isStatic = true;
-      var processedMidpoint = this._calc_average(body.vertices);
+      var processedMidpoint = this._calcAverage(body.vertices);
       var newX = originalMidpoint.x - (processedMidpoint.x+1000);
       var newY = originalMidpoint.y - (processedMidpoint.y+1000);
       var newBody = this.game.matter.bodies.fromVertices(newX, newY, verts);
       newBody.isStatic = true;
       var sprite = this.game.matter.add.sprite(newX, newY);
       sprite.setExistingBody(newBody);
-      console.log(sprite);
       this.sprites.push(sprite);
     }
-    console.log(this.game);
-    //console.log(this.game.matter.world);
   }
 
-  remove_barriers() {
+  removeBarriers() {
     for (var sprite of this.sprites) {
       sprite.destroy();
     }
@@ -42,13 +39,50 @@ class Barriers {
   //works for regular shapes, and these shapes ain't regular mate.
   //perhaps finding the max and min ys and xs and then averaging them will work?
   //good luck, you're gonna need it.
-  _calc_average(vertices) {
+  _calcAverage(vertices) {
     var maxX = Math.max.apply(Math, vertices.map((o) => o.x));
     var minX = Math.min.apply(Math, vertices.map((o) => o.x));
     var maxY = Math.max.apply(Math, vertices.map((o) => o.y));
     var minY = Math.min.apply(Math, vertices.map((o) => o.y));
     return {'x': (maxX+minX)/2, 'y': (maxY+minY)/2};
   }
+}
+
+class FloorManager {
+  constructor(boundary_defs, floorImage, player, game) {
+    this.game = game;
+    this.player = player;
+    this.floor = 0;
+    this.floorImage = floorImage;
+    floorImage.setTexture('floor0');
+    this.barriers = new Barriers(game, boundary_defs[0]);
+    this.boundaryDefinitions = boundary_defs;
+  }
+
+  update() {
+
+  }
+
+  moveUp() {
+    if (this.floor < 1) {
+      this.floor++;
+    }
+    this.loadFloor();
+  }
+
+  moveDown() {
+    if (this.floor > 0) {
+      this.floor--;
+    }
+    this.loadFloor();
+  }
+
+  loadFloor() {
+    this.barriers.removeBarriers();
+    this.barriers.addBarriers(this.boundaryDefinitions[this.floor]);
+    this.floorImage.setTexture('floor'+this.floor);
+  }
+
 }
 
 var config = {
@@ -76,13 +110,13 @@ var player;
 var inventory;
 var wasdKeys;
 var droppedHandler;
-var barriers;
+var floorManager;
 
 
 function preload () {
 
-  this.load.image('floor', 'assets/ground_floor_school_house.png');
-  this.load.image('obstacle','assets/obstacle.png');
+  this.load.image('floor0', 'assets/floor0.png');
+  this.load.image('floor1', 'assets/floor1.png');
   this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
@@ -92,7 +126,8 @@ var xLimit, yLimit;
 
 function create () {
 
-  var floor = this.add.image(0, 0, 'floor').setScale(14);
+  var floor = this.add.image(0, 0, 'floor0').setScale(14);
+  //floor.setTexture('floor0');
   floor.angle = 0;
   floor.x = floor.displayWidth/2;
   floor.y = floor.displayHeight/2;
@@ -100,8 +135,6 @@ function create () {
   yLimit = floor.displayHeight;
 
   player = new Player(this, 'assets', 600, 2000);
-
-  this.matter.add.image(300, 200, 'obstacle').setStatic(true);
 
   wasdKeys = {
     'w': this.input.keyboard.addKey('W'),
@@ -118,13 +151,12 @@ function create () {
 
   inventory = new Inventory(4, 6, this);
   droppedHandler = new DroppedItemHandler(player, inventory, this);
+  floorManager = new FloorManager(boundary_definitions, floor, player, this);
   //for (let i=0; i<8; i++) {
   //  droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
   //}
 
   this.input.on('pointerdown', on_click, this);
-
-  barriers = new Barriers(this, floor0_boundaries);
 
 }
 

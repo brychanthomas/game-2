@@ -55,7 +55,7 @@ var img;
 var shapes = [];
 
 function preload() {
-  img = loadImage('../ground_floor_school_house.png');
+  img = loadImage('../floor0.png');
 }
 
 var copyButton;
