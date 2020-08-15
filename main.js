@@ -123,7 +123,7 @@ function create () {
 
   this.input.on('pointerdown', on_click, this);
 
-  var barriers = new Barriers(this, floor0_boundaries);
+  var barriers = new Barriers(this, floor0_boundaries_test);
 
 }
 
