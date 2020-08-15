@@ -60,21 +60,35 @@ class FloorManager {
   }
 
   update() {
-
+    var x = this.player.x;
+    var y = this.player.y + 60;
+    var upMainStairway = (x > 1670 && x < 1790) && (y > 1280 && y < 1390);
+    var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1500);
+    if (upMainStairway) {
+      this.moveUp();
+    } else if (downMainStairway) {
+      this.moveDown();
+    }
   }
 
   moveUp() {
     if (this.floor < 1) {
       this.floor++;
+      player.x = 1530;
+      player.y = 1540;
+      player.direction = 'down';
+      this.loadFloor();
     }
-    this.loadFloor();
   }
 
   moveDown() {
     if (this.floor > 0) {
       this.floor--;
+      player.x = 1550;
+      player.y = 1540;
+      player.direction = 'down';
+      this.loadFloor();
     }
-    this.loadFloor();
   }
 
   loadFloor() {
@@ -134,7 +148,7 @@ function create () {
   xLimit = floor.displayWidth;
   yLimit = floor.displayHeight;
 
-  player = new Player(this, 'assets', 600, 2000);
+  player = new Player(this, 'assets', 1300, 2200);
 
   wasdKeys = {
     'w': this.input.keyboard.addKey('W'),
@@ -172,6 +186,7 @@ function update () {
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
   droppedHandler.update();
+  floorManager.update();
   // if (player.x < 2750) {
   //   this.cameras.main.setBounds(0, 1220, xLimit, 1240);
   // } else {

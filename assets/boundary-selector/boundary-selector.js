@@ -55,7 +55,7 @@ var img;
 var shapes = [];
 
 function preload() {
-  img = loadImage('../floor0.png');
+  img = loadImage('../floor1.png');
 }
 
 var copyButton;

@@ -132,4 +132,19 @@ class Player {
   get y() {
     return this.sprite.y;
   }
+
+  set x(x) {
+    this.sprite.x = x;
+  }
+
+  set y(y) {
+    this.sprite.y = y;
+  }
+
+  set direction(dir) {
+    if (['up', 'down', 'left', 'right'].indexOf(dir) !== -1) {
+      player.sprite.anims.play(dir+'Stop', true);
+    }
+  }
+
 }
