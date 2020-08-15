@@ -65,7 +65,7 @@ class FloorManager {
     var upMainStairway = (x > 1670 && x < 1790) && (y > 1280 && y < 1390);
     var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1500);
     var upSecondStairway = (x > 3410 && x < 3520) && (y > 1660 && y < 1840);
-    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1790 && y < 1840);
+    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1760 && y < 1840);
     if (upMainStairway || upSecondStairway) {
       this.moveUp();
     } else if (downMainStairway || downSecondStairway) {
