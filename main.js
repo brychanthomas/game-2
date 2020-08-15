@@ -1,3 +1,46 @@
+class Barriers {
+  constructor(game, barrierArray) {
+    this.game = game;
+    this.add_barriers(barrierArray);
+  }
+
+  add_barriers(barrierArray) {
+    for (var b of barrierArray) {
+      var vertStr = ''
+      for (var vert of b['vertices']) {
+        vertStr += Math.round(vert.x) + ' ' + Math.round(vert.y) + ' '
+      }
+      vertStr = vertStr.slice(0, -1);
+      console.log(vertStr);
+      var verts = this.game.matter.verts.fromPath(vertStr);
+      var midpoint = this._calc_average(b['vertices']);
+      var body = this.game.matter.bodies.fromVertices(midpoint.x, midpoint.y, verts);
+      body.isStatic = true;
+      console.log(body)
+       // for (var v of body.vertices) {
+       //   v.x += midpoint.x;
+       //   v.y += midpoint.y;
+       // }
+      this.game.matter.world.add(body);
+    }
+    //console.log(this.game.matter);
+  }
+
+  destroy_barriers() {
+
+  }
+
+  _calc_average(vertices) {
+    var x = 0;
+    var y = 0;
+    for (var v of vertices) {
+      x += Math.round(v.x);
+      y += Math.round(v.y);
+    }
+    return {'x': x/vertices.length, 'y': y/vertices.length};
+  }
+}
+
 var config = {
   type: Phaser.CANVAS,
   width: 1000,
@@ -24,6 +67,8 @@ var inventory;
 var wasdKeys;
 var droppedHandler;
 
+var o;
+
 function preload () {
 
   this.load.image('floor', 'assets/ground_floor_school_house.png');
@@ -46,7 +91,7 @@ function create () {
 
   player = new Player(this, 'assets', 600, 2000);
 
-  this.matter.add.image(300, 200, 'obstacle').setStatic(true);
+  o=this.matter.add.image(300, 200, 'obstacle').setStatic(true);
 
   wasdKeys = {
     'w': this.input.keyboard.addKey('W'),
@@ -67,6 +112,8 @@ function create () {
   //}
 
   this.input.on('pointerdown', on_click, this);
+
+  var barriers = new Barriers(this, floor0_boundaries);
 
 }
 

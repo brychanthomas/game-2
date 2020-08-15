@@ -57,18 +57,18 @@ function preload() {
 
 var copyButton;
 function setup() {
-  createCanvas((img.width*4)+100, (img.height*4));
-  pixelDensity(14/4);
+  createCanvas((img.width*14)+100, (img.height*14));
+  //pixelDensity(3);
 
   copyButton = createButton('Copy bounds<br>to clipboard');
-  copyButton.position((img.width*4)+10, 50);
+  copyButton.position((img.width*14)+10, 50);
   copyButton.mousePressed(copyJSON);
 
 }
 
 function draw() {
   background(255);
-  image(img, 0, 0, img.width*4, img.height*4);
+  image(img, 0, 0, img.width*14, img.height*14);
   shapes.forEach(function(region) {
     region.display();
   });
