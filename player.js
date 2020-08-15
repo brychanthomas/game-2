@@ -66,18 +66,18 @@ class Player {
   change_bounding_box(direction) {
     if (direction === 'side') {
       this.sprite.body.vertices[0].x = this.sprite.x - 20;
-      this.sprite.body.vertices[0].y = this.sprite.y + 10;
+      this.sprite.body.vertices[0].y = this.sprite.y + 25;
       this.sprite.body.vertices[1].x = this.sprite.x + 24;
-      this.sprite.body.vertices[1].y = this.sprite.y + 10;
+      this.sprite.body.vertices[1].y = this.sprite.y + 25;
       this.sprite.body.vertices[2].x = this.sprite.x + 24;
       this.sprite.body.vertices[2].y = this.sprite.y + 60;
       this.sprite.body.vertices[3].x = this.sprite.x - 20;
       this.sprite.body.vertices[3].y = this.sprite.y + 60;
     } else {
       this.sprite.body.vertices[0].x = this.sprite.x - 30;
-      this.sprite.body.vertices[0].y = this.sprite.y + 10;
+      this.sprite.body.vertices[0].y = this.sprite.y + 25;
       this.sprite.body.vertices[1].x = this.sprite.x + 36;
-      this.sprite.body.vertices[1].y = this.sprite.y + 10;
+      this.sprite.body.vertices[1].y = this.sprite.y + 25;
       this.sprite.body.vertices[2].x = this.sprite.x + 36;
       this.sprite.body.vertices[2].y = this.sprite.y + 60;
       this.sprite.body.vertices[3].x = this.sprite.x - 28;
