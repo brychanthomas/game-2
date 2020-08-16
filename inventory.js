@@ -182,7 +182,7 @@ class DroppedItem {
     this.game = game;
     this.spriteObject = game.add.sprite(x, y, 'assets');
     this.spriteObject.frame = this.spriteObject.frame.texture.frames[item.frameNumber];
-    this.spriteObject.setScale(2);
+    this.spriteObject.setScale(4);
     this.spriteObject.depth = 0; //send to back, behind other sprites
   }
 
@@ -231,8 +231,8 @@ class DroppedItemHandler {
     let toDelete = [];
     for (let i=0; i<this.items.length; i++) {
       this.items[i].updatePosition();
-      this.items[i].setVisibility(!this.inventory.isVisible());
-      if (this.items[i].getDistanceTo(this.player.x, this.player.y) < 30) {
+      this.items[i].setVisibility(!this.inventory.isVisible() && this._visible);
+      if (this.items[i].getDistanceTo(this.player.x, this.player.y) < 60) {
         if (this.inventory.addItem(this.items[i].item)) {
           this.items[i].destroy();
           toDelete.push(i);
@@ -243,6 +243,11 @@ class DroppedItemHandler {
     for (let index of toDelete) {
       this.items.splice(index, 1);
     }
+  }
+
+  set itemsVisible(bool) {
+    this.items.forEach((itm) => {itm.setVisibility(bool)});
+    this._visible = bool;
   }
 }
 

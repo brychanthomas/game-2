@@ -52,7 +52,7 @@ class Barriers {
 //manages changing the floor and boundaries for the floor the player
 //is on as well as allowing them to move up and down via stairs
 class FloorManager {
-  constructor(boundary_defs, player, game) {
+  constructor(boundary_defs, player, inventory, game) {
     this.game = game;
     this.player = player;
     this.floor = 0;
@@ -64,6 +64,11 @@ class FloorManager {
     yLimit = this.floorImage.displayHeight;
     this.barriers = new Barriers(game, boundary_defs[0]);
     this.boundaryDefinitions = boundary_defs;
+    this.inventory = inventory;
+    this.droppedItemHandlers = [];
+    for (var i=0; i<3; i++) {
+      this.droppedItemHandlers.push(new DroppedItemHandler(player, inventory, game));
+    }
   }
 
   //check if player is in stairway and move them up/down if they are
@@ -79,6 +84,7 @@ class FloorManager {
     } else if (downMainStairway || downSecondStairway) {
       this.changeFloor(-1);
     }
+    this.droppedItemHandlers[this.floor].update();
   }
 
   //move the player up or down a specific number of floors
@@ -99,6 +105,7 @@ class FloorManager {
           this.player.y = 1730;
           this.player.direction = 'left';
         }
+
         this.loadFloor();
 
         camera.fadeIn(1000, 0, 0, 0);
@@ -111,18 +118,26 @@ class FloorManager {
 
   }
 
-  //load the current floor by replacing the barriers and setting the correct
-  //floor texture
+  //load the current floor by replacing the barriers, setting the correct
+  //floor texture and making the correct dropped items visible
   loadFloor() {
     this.barriers.removeBarriers();
     this.barriers.addBarriers(this.boundaryDefinitions[this.floor]);
     this.floorImage.setTexture('floor'+this.floor);
+    this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
+    this.droppedItemHandlers[this.floor].itemsVisible = true;
+  }
+
+  addDroppedItem(item, x, y, floor) {
+    this.droppedItemHandlers[floor].add(x, y, item);
+    this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
+    this.droppedItemHandlers[this.floor].itemsVisible = true;
   }
 
 }
 
 var config = {
-  type: Phaser.CANVAS,
+  type: Phaser.WebGL,
   width: 1000,
   height: 600,
   pixelArt: true,
@@ -176,10 +191,11 @@ function create () {
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
   this.cameras.main.setBackgroundColor('#a6a6a6');
+  this.cameras.main.tint = 0xff0000;
 
-  floorManager = new FloorManager(boundary_definitions, player, this);
   inventory = new Inventory(4, 6, this);
-  droppedHandler = new DroppedItemHandler(player, inventory, this);
+  floorManager = new FloorManager(boundary_definitions, player, inventory, this);
+
   //for (let i=0; i<8; i++) {
   //  droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
   //}
@@ -203,7 +219,6 @@ function update () {
   }
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
-  droppedHandler.update();
   floorManager.update();
   // if (player.x < 2750) {
   //   this.cameras.main.setBounds(0, 1220, xLimit, 1240);
