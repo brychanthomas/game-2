@@ -189,7 +189,7 @@ class DroppedItem {
   //use the game clock to move it up and down in a sine wave pattern
   updatePosition(playerX, playerY) {
     let y = this.y + 4;
-    y -= 8*  Math.sin(this.game.time.now / 200);
+    y -= 8 *  Math.sin(this.game.time.now / 200);
     this.spriteObject.y = y;
   }
 
