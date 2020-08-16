@@ -89,7 +89,7 @@ class FloorManager {
 
   //move the player up or down a specific number of floors
   changeFloor(change) {
-    if (this.floor+change >= 0 && this.floor+change <= 1) {
+    if (this.floor+change >= 0 && this.floor+change <= 2) {
       this.floor += change;
       this.player.disableMovement = true;
 
@@ -168,6 +168,8 @@ function preload () {
 
   this.load.image('floor0', 'assets/floor0.png');
   this.load.image('floor1', 'assets/floor1.png');
+  this.load.image('floor2', 'assets/missing.png');
+  this.load.image('missing', 'assets/missing.png');
   this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
@@ -205,6 +207,9 @@ function create () {
   this.input.keyboard.on('keydown_C', function (event) {
     this.cameras.main.shake(2000);
   }.bind(this));
+
+  var back = this.add.tileSprite(2000, 2500, 4000, 5000, 'missing');
+  back.depth=-1;
 
 }
 
