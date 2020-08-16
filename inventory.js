@@ -6,9 +6,11 @@ class InventorySlot {
     this.imageObject = game.add.image(x, y, image);
     this.imageObject.setScale(0.8);
     this.imageObject.visible = false;
+    this.imageObject.depth = 4;
     this.contentsSprite = game.add.sprite(x, y, 'assets');
     this.contentsSprite.setScale(3);
     this.contentsSprite.visible = false;
+    this.contentsSprite.depth = 4;
     this.contents = null;
     this.game = game;
   }
@@ -87,6 +89,7 @@ class Inventory {
   constructor(rows, columns, game) {
     this.imageObject = game.add.image(500, 300, 'inventoryBack');
     this.imageObject.visible = false;
+    this.imageObject.depth = 3;
     this.imageObject.setScale(0.8);
     this.game = game;
     this.baseX = 500;
@@ -150,6 +153,7 @@ class Inventory {
     if (this.inHandSprite === undefined) {
       this.inHandSprite = this.game.add.sprite(0, 0, 'assets');
       this.inHandSprite.setScale(3);
+      this.inHandSprite.depth = 5;
       this.inHandText = this.game.add.text(0, 0, 'Henlo', {fontSize: '15px', fontFamily: 'Arial'});
       this.inHandText.setColor('black');
     }
@@ -252,7 +256,7 @@ class Item {
     }
     return name;
   }
-  
+
   constructor(name, frameNumber, recipe) {
     this.name = name;
     this.frameNumber = frameNumber;

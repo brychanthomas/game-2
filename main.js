@@ -52,12 +52,16 @@ class Barriers {
 //manages changing the floor and boundaries for the floor the player
 //is on as well as allowing them to move up and down via stairs
 class FloorManager {
-  constructor(boundary_defs, floorImage, player, game) {
+  constructor(boundary_defs, player, game) {
     this.game = game;
     this.player = player;
     this.floor = 0;
-    this.floorImage = floorImage;
-    floorImage.setTexture('floor0');
+    this.floorImage = this.game.add.image(0, 0, 'floor0').setScale(14);
+    this.floorImage.angle = 0;
+    this.floorImage.x = this.floorImage.displayWidth/2;
+    this.floorImage.y = this.floorImage.displayHeight/2;
+    xLimit = this.floorImage.displayWidth;
+    yLimit = this.floorImage.displayHeight;
     this.barriers = new Barriers(game, boundary_defs[0]);
     this.boundaryDefinitions = boundary_defs;
   }
@@ -69,7 +73,7 @@ class FloorManager {
     var upMainStairway = (x > 1670 && x < 1790) && (y > 1280 && y < 1390);
     var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1500);
     var upSecondStairway = (x > 3410 && x < 3520) && (y > 1660 && y < 1840);
-    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1780 && y < 1840);
+    var downSecondStairway = (x > 3290 && x < 3400) && (y > 1780 && y < 1850);
     if (upMainStairway || upSecondStairway) {
       this.changeFloor(+1);
     } else if (downMainStairway || downSecondStairway) {
@@ -158,13 +162,6 @@ var xLimit, yLimit;
 
 function create () {
 
-  var floor = this.add.image(0, 0, 'floor0').setScale(14);
-  floor.angle = 0;
-  floor.x = floor.displayWidth/2;
-  floor.y = floor.displayHeight/2;
-  xLimit = floor.displayWidth;
-  yLimit = floor.displayHeight;
-
   player = new Player(this, 'assets', 1300, 2200);
 
   wasdKeys = {
@@ -180,14 +177,18 @@ function create () {
   this.cameras.main.centerOn(player.x, player.y);
   this.cameras.main.setBackgroundColor('#a6a6a6');
 
+  floorManager = new FloorManager(boundary_definitions, player, this);
   inventory = new Inventory(4, 6, this);
   droppedHandler = new DroppedItemHandler(player, inventory, this);
-  floorManager = new FloorManager(boundary_definitions, floor, player, this);
   //for (let i=0; i<8; i++) {
   //  droppedHandler.add(500+(i*50), 300, ITEMS[i].name);
   //}
 
   this.input.on('pointerdown', on_click, this);
+
+  this.input.keyboard.on('keydown_C', function (event) {
+    this.cameras.main.shake(2000);
+  }.bind(this));
 
 }
 
@@ -209,7 +210,6 @@ function update () {
   // } else {
   //   this.cameras.main.setBounds(2580, 0, xLimit-2580, yLimit);
   // }
-  //this.cameras.main.shake(1000);
 }
 
 //on mouse click for inventory management

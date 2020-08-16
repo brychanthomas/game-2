@@ -3,6 +3,7 @@ class Player {
   constructor (game, spritesheet, x, y) {
     this.sprite = game.matter.add.sprite(x, y, spritesheet);
     this.sprite.setScale(6);
+    this.sprite.depth=1;
     this.game = game;
     this._initialise_animations();
     this.disableMovement = false;
