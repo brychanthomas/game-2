@@ -1,5 +1,19 @@
-//individual slots within the inventory window
+/**
+ * Class representing an  individual slot that will be placed within the
+ * Inventory window.
+ */
 class InventorySlot {
+
+  /**
+   * Create an image to show the boundary of the slot as well as
+   * a sprite to show the content.
+   *
+   * @param  {number} x - The x coordinate of the slot relative to the camera.
+   * @param  {number} y - The y coordinate of the slot relative to the camera.
+   * @param  {string} image - The name of the image showing the boundaries.
+   * @param  {Phaser.Scene} game - The Scene the slot should be created in.
+   * @constructor
+   */
   constructor (x, y, image, game) {
     this.baseX = x;
     this.baseY = y;
@@ -15,7 +29,10 @@ class InventorySlot {
     this.game = game;
   }
 
-  //show/hide slot
+  /**
+   * Toggles whether the slot and its content is visible or not, ensuring
+   * it is in the correct position.
+   */
   toggleVisibility () {
     this.imageObject.visible = !this.imageObject.visible;
     this.imageObject.x = this.game.cameras.main.scrollX + this.baseX;
@@ -24,7 +41,10 @@ class InventorySlot {
 
   }
 
-  //show/hide image of contents of inventory slot
+  /**
+   * Toggles whether the content of the slot is visible, ensuring it is
+   * set to the correct frame of the spritesheet and in the correct position.
+   */
   _toggleVisibilityOfContents() {
     if (this.contents !== null && this.contents !== undefined) {
       //I'm not sure why I have to do this to change the frame but it works
@@ -38,6 +58,19 @@ class InventorySlot {
   }
 
   //when mouse clicked pick up and drop off item if it is on this slot
+  //
+  /**
+   * Called when mouse is clicked. Checks if the mouse has clicked within the
+   * boundaries of the slot and, if it has, swaps the item in the player's
+   * 'hand' with the item in the slot.
+   *
+   * @param  {number} mouseX  - The X coordinate the mouse clicked on.
+   * @param  {number} mouseY  - The Y coordinate the mouse clicked on.
+   * @param  {object} inHand  - Object representation of the item in the player's 'hand'.
+   * @return {object}         - Object representation of the item that is now in the
+   * player's hand, no matter whether it has been swapped with the item in the slot or not.
+   */
+
   mouseClick(mouseX, mouseY, inHand) {
     let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
     let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseY < this.imageObject.y+(this.imageObject.displayHeight/2);
@@ -54,7 +87,27 @@ class InventorySlot {
 
 //special type of inventory slot that allows you to combine two items to make
 //a new item
+
+/**
+ * Class representing a crafting slot that is placed in the Inventory window.
+ * @extends InventorySlot
+ */
 class CraftingSlot extends InventorySlot {
+
+  /**
+   * Called when mouse is clicked. Checks if the mouse has clicked within the
+   * boundaries of the slot and, if it has, attempts to craft the item in the
+   * slot with the item in the player's 'hand'. If there is nothing in the
+   * slot or the player's hand, or if the two items cannot be crafted, it
+   * swaps them.
+   *
+   * @param  {number} mouseX  - The X coordinate the mouse clicked on.
+   * @param  {number} mouseY  - The Y coordinate the mouse clicked on.
+   * @param  {object} inHand  - Object representation of the item in the player's 'hand'.
+   * @return {object}         - Object representation of the item that is now in the
+   * player's hand, no matter whether it has been swapped with the item in the slot or
+   * crafted or neither.
+   */
   mouseClick(mouseX, mouseY, inHand) {
     let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
     let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseY < this.imageObject.y+(this.imageObject.displayHeight/2);
@@ -72,6 +125,16 @@ class CraftingSlot extends InventorySlot {
   }
 
   //try to combine the item in the player's hand and the content of the slot
+  /**
+   * Tries to craft the item in the slot together with the item in the player's
+   * hand by checking the recipe of every item in the ITEMS array. If an item is
+   * crafted it replaces the item that was originally in the slot.
+   *
+   * @param  {object} inHand - Object representation of the item in the player's 'hand'.
+   * @return {object}        - The item that should now be in the player's hand
+   * (or null if something was crafted).
+   */
+
   craft(inHand) {
     for (let i=0; i<ITEMS.length; i++) {
       if (ITEMS[i].recipe.includes(inHand.name) && ITEMS[i].recipe.includes(this.contents.name)) {
@@ -251,9 +314,23 @@ class DroppedItemHandler {
   }
 }
 
-//individual item
+
+/**
+ * Object that represents a specific item - stores its name, frame number in the
+ * spritesheet and its recipe.
+ */
 class Item {
   //convert the name of an item to its object representation
+  //
+  /**
+   * @static
+   * Takes the name of an item and converts it to its object representation or, if
+   * it is not a string, returns it as is.
+   *
+   * @param  {string} name - The name of the item.
+   * @return {object}        The object representation of the item.
+   */
+
   static nameToObject(name) {
     if (typeof name === "string") {
       let item = ITEMS.find((itm, ind, arr) => itm.name === name);
@@ -262,6 +339,15 @@ class Item {
     return name;
   }
 
+
+  /**
+   *
+   *
+   * @param  {string}  name       - The name of the item.
+   * @param  {number} frameNumber - The frame number of the item in the spritesheet.
+   * @param  {Array}  recipe      - An array of the names of other items needed to craft this item.
+   * @constructor
+   */
   constructor(name, frameNumber, recipe) {
     this.name = name;
     this.frameNumber = frameNumber;

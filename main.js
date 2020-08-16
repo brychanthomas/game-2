@@ -122,7 +122,7 @@ function create () {
   this.cameras.main.setBounds(0, 0, xLimit, yLimit);
   this.cameras.main.setZoom(1);
   this.cameras.main.centerOn(player.x, player.y);
-  this.cameras.main.setBackgroundColor('#a6a6a6');
+  this.cameras.main.setBackgroundColor('#d2d1cd');
   this.cameras.main.tint = 0xff0000;
 
   inventory = new Inventory(4, 6, this);
@@ -137,9 +137,6 @@ function create () {
   this.input.keyboard.on('keydown_C', function (event) {
     this.cameras.main.shake(2000);
   }.bind(this));
-
-  var back = this.add.tileSprite(2000, 2500, 4000, 5000, 'missing');
-  back.depth=-1;
 
 }
 
