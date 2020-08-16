@@ -62,6 +62,7 @@ class FloorManager {
     this.floorImage.y = this.floorImage.displayHeight/2;
     xLimit = this.floorImage.displayWidth;
     yLimit = this.floorImage.displayHeight;
+    this.lastFloorChangeTime = 0;
     this.barriers = new Barriers(game, boundary_defs[0]);
     this.boundaryDefinitions = boundary_defs;
     this.inventory = inventory;
@@ -89,8 +90,10 @@ class FloorManager {
 
   //move the player up or down a specific number of floors
   changeFloor(change) {
-    if (this.floor+change >= 0 && this.floor+change <= 2) {
+    var timeSinceLastChange = this.game.time.now - this.lastFloorChangeTime;
+    if (this.floor+change >= 0 && this.floor+change <= 2 && timeSinceLastChange > 1500) {
       this.floor += change;
+      this.lastFloorChangeTime = this.game.time.now;
       this.player.disableMovement = true;
 
       this.game.cameras.main.fadeOut(200, 0, 0, 0);
@@ -130,8 +133,8 @@ class FloorManager {
 
   addDroppedItem(item, x, y, floor) {
     this.droppedItemHandlers[floor].add(x, y, item);
-    this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
-    this.droppedItemHandlers[this.floor].itemsVisible = true;
+    //this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
+    //this.droppedItemHandlers[this.floor].itemsVisible = true;
   }
 
 }
