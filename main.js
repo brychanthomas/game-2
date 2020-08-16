@@ -1,14 +1,26 @@
-//loads and removes barriers in the game (walls, furniture etc) as
-//static sprites
+/**
+ * Class that loads and removes barriers in the game (walls,
+ * furniture etc) as physics sprites.
+ */
 class Barriers {
+  /**
+   * Create barriers.
+   * @param {Phaser.Scene} game - The scene object to add barriers into
+   * @param {Array} barrierArray - An array of objects representing the barriers (see barrier-selector)
+   *
+  */
   constructor(game, barrierArray) {
+    console.log(game)
     this.game = game;
     this.sprites = [];
     this.addBarriers(barrierArray);
   }
 
-  //take a an array of barriers produced by boundary-selector and
-  //add barriers to the world accordingly
+  /**
+   * Adds barriers to the scene.
+   * @param {Array} barrierArray - An array of objects representing the barriers (see barrier-selector)
+   *
+  */
   addBarriers(barrierArray) {
     for (var b of barrierArray) {
       var vertStr = ''
@@ -31,7 +43,9 @@ class Barriers {
     }
   }
 
-  //remove all of the barriers that currently exist
+  /**
+   * Remove all currently existing barriers created by this object.
+   */
   removeBarriers() {
     for (var sprite of this.sprites) {
       sprite.destroy();
@@ -39,7 +53,10 @@ class Barriers {
     this.bodyIDs = [];
   }
 
-  //calculate the midpoint of a set of vertices
+  /**
+   * Calculate the midpoint of a shape.
+   * @param {Array} - An array of x and y coordinates representing the object's vertices.
+   */
   _calcAverage(vertices) {
     var maxX = Math.max.apply(Math, vertices.map((o) => o.x));
     var minX = Math.min.apply(Math, vertices.map((o) => o.x));
