@@ -7,7 +7,7 @@ class Barriers {
    * Create barriers.
    * @param {Phaser.Scene} game - The scene object to add barriers into
    * @param {Array} barrierArray - An array of objects representing the barriers (see barrier-selector)
-   *
+   * @constructor
   */
   constructor(game, barrierArray) {
     console.log(game)

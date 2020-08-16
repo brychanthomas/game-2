@@ -1,7 +1,18 @@
-//manages changing the image, boundaries and drops for the floor
-//the player is on as well as allowing them to move up and down
-//via stairs
+/**
+ * Class that manages changing the floor image, boundaries and items
+ * for the floor the player is on as well as allowing them to move
+ * up and down via stairs.
+ */
 class FloorManager {
+  /**
+   * Creates floor image, Barriers object and DroppedItemHandlers
+   * and sets everything up for floor 0.
+   * @param {Array} boundary_defs - Array of arrays of boundary definitions for each floor
+   * @param {Player} player - The Player object, needed for coordinates to check if on stairs
+   * @param {Inventory} inventory - The Inventory object, needed to create DroppedItemHandlers
+   * @param {Phaser.Scene} game - The Scene the player is in.
+   * @constructor
+   */
   constructor(boundary_defs, player, inventory, game) {
     this.game = game;
     this.player = player;
@@ -15,14 +26,16 @@ class FloorManager {
     this.lastFloorChangeTime = 0;
     this.barriers = new Barriers(game, boundary_defs[0]);
     this.boundaryDefinitions = boundary_defs;
-    this.inventory = inventory;
     this.droppedItemHandlers = [];
     for (var i=0; i<3; i++) {
       this.droppedItemHandlers.push(new DroppedItemHandler(player, inventory, game));
     }
   }
 
-  //check if player is in stairway and move them up/down if they are
+  /**
+   * Check if the player is in a stairway and move them up/down if
+   * they are.
+   */
   update() {
     var x = this.player.x;
     var y = this.player.y + 60;
@@ -38,7 +51,10 @@ class FloorManager {
     this.droppedItemHandlers[this.floor].update();
   }
 
-  //move the player up or down a specific number of floors
+  /**
+   * Move up or down a specific number of floors.
+   * @param {number} change - The number of floors to move (usually 1 or -1).
+   */
   changeFloor(change) {
     var timeSinceLastChange = this.game.time.now - this.lastFloorChangeTime;
     if (this.floor+change >= 0 && this.floor+change <= 2 && timeSinceLastChange > 1500) {
@@ -66,13 +82,14 @@ class FloorManager {
           this.player.disableMovement = false;
         }, this);
     }, this);
-
   }
 
   }
 
-  //load the current floor by replacing the barriers, setting the correct
-  //floor texture and making the correct dropped items visible
+  /**
+   * Load the current floor by replacing the barriers, setting the correct
+   * floor texture and making the correct dropped items visible.
+   */
   loadFloor() {
     this.barriers.removeBarriers();
     this.barriers.addBarriers(this.boundaryDefinitions[this.floor]);
@@ -81,6 +98,13 @@ class FloorManager {
     this.droppedItemHandlers[this.floor].itemsVisible = true;
   }
 
+  /**
+   * Adds an item to one of the floors.
+   * @param {string} item - The name of the item to add.
+   * @param {number} x = The x coordinate of the item.
+   * @param {number} y = The y coordinate of the item.
+   * @param {number} floor = The floor to add the item on.
+   */
   addDroppedItem(item, x, y, floor) {
     this.droppedItemHandlers[floor].add(x, y, item);
     this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
