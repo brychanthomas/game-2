@@ -349,7 +349,20 @@ class DroppedItem {
   }
 }
 
+
+/**
+ * Class to manage all of the dropped items on a floor.
+ */
 class DroppedItemHandler {
+
+  /**
+   * Creates a handler to manage dropped items.
+   *
+   * @param  {Player}       player    - The Player instance.
+   * @param  {Inventory}    inventory - The Inventory instance.
+   * @param  {Phaser.Scene} game      - The Scene the items should be added to.
+   * @constructor
+   */
   constructor(player, inventory, game) {
     this.player = player;
     this.inventory = inventory;
@@ -357,7 +370,13 @@ class DroppedItemHandler {
     this.items = [];
   }
 
-  //add a dropped item to be shown
+  /**
+   * Add a dropped item.
+   *
+   * @param  {number} x    - The x position of the item.
+   * @param  {number} y    - The x position of the item.
+   * @param  {object} item - The object representation of the item.
+   */
   add(x, y, item) {
     item = Item.nameToObject(item);
     this.items.push(new DroppedItem(item, x, y, this.game));
@@ -365,6 +384,12 @@ class DroppedItemHandler {
 
   //move items up and down each frame, hide them if the inventory is opened and
   //add them to the inventory if the player is close
+
+  /**
+   * Called every frame to move the items up and down, hide them if the
+   * inventory is opened and add them to the inventory is the player is
+   * close, deleting the DroppedItem instance.
+   */
   update() {
     let toDelete = [];
     for (let i=0; i<this.items.length; i++) {
@@ -383,6 +408,13 @@ class DroppedItemHandler {
     }
   }
 
+
+  /**
+   * Sets whether the dropped items should be visible or not (used in
+   * FloorManager for changing floors).
+   *
+   * @param  {boolean} bool - Whether the items should be visible or not.
+   */
   set itemsVisible(bool) {
     this.items.forEach((itm) => {itm.setVisibility(bool)});
     this._visible = bool;
