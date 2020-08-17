@@ -40,7 +40,7 @@ class FloorManager {
     var x = this.player.x;
     var y = this.player.y + 60;
     var upMainStairway = (x > 1670 && x < 1790) && (y > 1280 && y < 1390);
-    var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1500);
+    var downMainStairway = (x > 1680 && x < 1780) && (y > 1400 && y < 1550);
     var upSecondStairway = (x > 3410 && x < 3520) && (y > 1660 && y < 1840);
     var downSecondStairway = (x > 3290 && x < 3400) && (y > 1780 && y < 1850);
     if (upMainStairway || upSecondStairway) {

@@ -65,11 +65,18 @@ class Region {
   }
 }
 
+var boundariesToLoad = [];//floor0_boundaries;
+
 var img;
 var shapes = [];
+for (var i=0; i<boundariesToLoad.length; i++) {
+  var r = new Region(0, 0, 3);
+  r.vertices = boundariesToLoad[i].vertices;
+  shapes.push(r);
+}
 
 function preload() {
-  img = loadImage('../floor1.png');
+  img = loadImage('../floor0.png');
 }
 
 var copyButton;

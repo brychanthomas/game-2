@@ -128,7 +128,6 @@ class Player {
    * 's' and 'd', each referring to Phaser.Key objects.
    */
   update(cursors) {
-    console.log(cursors);
     if (!this.disableMovement) {
       if (cursors.a.isDown && this.x > 0) {
         this.setVelocity(-6, 0);

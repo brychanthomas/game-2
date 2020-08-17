@@ -10,7 +10,6 @@ class Barriers {
    * @constructor
   */
   constructor(game, barrierArray) {
-    console.log(game)
     this.game = game;
     this.sprites = [];
     this.addBarriers(barrierArray);
