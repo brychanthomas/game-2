@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: inventory.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: inventory.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Class representing an  individual slot that will be placed within the
  * Inventory window.
  */
@@ -46,7 +74,7 @@ class InventorySlot {
    * set to the correct frame of the spritesheet and in the correct position.
    */
   _toggleVisibilityOfContents() {
-    if (this.contents !== null && this.contents !== undefined) {
+    if (this.contents !== null &amp;&amp; this.contents !== undefined) {
       //I'm not sure why I have to do this to change the frame but it works
       this.contentsSprite.frame = this.contentsSprite.frame.texture.frames[this.contents.frameNumber];
       this.contentsSprite.visible = this.imageObject.visible;
@@ -72,9 +100,9 @@ class InventorySlot {
    */
 
   mouseClick(mouseX, mouseY, inHand) {
-    let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
-    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseY < this.imageObject.y+(this.imageObject.displayHeight/2);
-    if (withinX && withinY) {
+    let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 &amp;&amp; mouseX &lt; this.imageObject.x+this.imageObject.displayWidth/2;
+    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 &amp;&amp; mouseY &lt; this.imageObject.y+(this.imageObject.displayHeight/2);
+    if (withinX &amp;&amp; withinY) {
       console.log(this.contents);
       let temp = this.contents;
       this.contents = inHand;
@@ -107,14 +135,14 @@ class CraftingSlot extends InventorySlot {
    * crafted or neither.
    */
   mouseClick(mouseX, mouseY, inHand) {
-    let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 && mouseX < this.imageObject.x+this.imageObject.displayWidth/2;
-    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 && mouseY < this.imageObject.y+(this.imageObject.displayHeight/2);
-    if (withinX && withinY) {
+    let withinX = mouseX > this.imageObject.x-this.imageObject.displayWidth/2 &amp;&amp; mouseX &lt; this.imageObject.x+this.imageObject.displayWidth/2;
+    let withinY = mouseY > this.imageObject.y-this.imageObject.displayHeight/2 &amp;&amp; mouseY &lt; this.imageObject.y+(this.imageObject.displayHeight/2);
+    if (withinX &amp;&amp; withinY) {
       console.log(this.contents);
       let temp = this.contents;
       this.contents = inHand;
       inHand = temp;
-      if (inHand != null && this.contents != null) {
+      if (inHand != null &amp;&amp; this.contents != null) {
         inHand = this.craft(inHand);
       }
       this._toggleVisibilityOfContents();
@@ -133,8 +161,8 @@ class CraftingSlot extends InventorySlot {
    */
 
   craft(inHand) {
-    for (let i=0; i<ITEMS.length; i++) {
-      if (ITEMS[i].recipe.includes(inHand.name) && ITEMS[i].recipe.includes(this.contents.name)) {
+    for (let i=0; i&lt;ITEMS.length; i++) {
+      if (ITEMS[i].recipe.includes(inHand.name) &amp;&amp; ITEMS[i].recipe.includes(this.contents.name)) {
         inHand = null;
         this.contents = ITEMS[i];
         break;
@@ -174,8 +202,8 @@ class Inventory {
     let xInterval = this.imageObject.width / (1.5*columns+2);
     let yInterval = this.imageObject.height / (1.1*rows+2);
     this.slots = [];
-    for (let row = 1; row <= rows; row++) {
-      for (let column = 1; column <= columns; column++) {
+    for (let row = 1; row &lt;= rows; row++) {
+      for (let column = 1; column &lt;= columns; column++) {
         let x = leftSide + (xInterval * column);
         let y = topSide + (yInterval * row)
         this.slots.push(new InventorySlot(x, y, 'inventoryBox', game));
@@ -192,7 +220,7 @@ class Inventory {
     this.imageObject.visible = !this.imageObject.visible;
     this.imageObject.x = this.game.cameras.main.scrollX + this.baseX;
     this.imageObject.y = this.game.cameras.main.scrollY + this.baseY;
-    for (let i=0; i < this.slots.length; i++) {
+    for (let i=0; i &lt; this.slots.length; i++) {
       this.slots[i].toggleVisibility();
     }
   }
@@ -241,7 +269,7 @@ class Inventory {
     if (this.isVisible()) {
       let relX = x + this.game.cameras.main.scrollX;
       let relY = y + this.game.cameras.main.scrollY;
-      for (let i=0; i<this.slots.length; i++) {
+      for (let i=0; i&lt;this.slots.length; i++) {
         this.inHand = this.slots[i].mouseClick(relX, relY, this.inHand);
       }
     }
@@ -260,7 +288,7 @@ class Inventory {
       this.inHandText = this.game.add.text(0, 0, 'Henlo', {fontSize: '15px', fontFamily: 'Arial'});
       this.inHandText.setColor('black');
     }
-    if (this.inHand !== null && this.inHand !== undefined) {
+    if (this.inHand !== null &amp;&amp; this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
       this.inHandSprite.visible = true;
       this.inHandSprite.x = this.game.input.mousePointer.x + this.game.cameras.main.scrollX;
@@ -392,10 +420,10 @@ class DroppedItemHandler {
    */
   update() {
     let toDelete = [];
-    for (let i=0; i<this.items.length; i++) {
+    for (let i=0; i&lt;this.items.length; i++) {
       this.items[i].updatePosition();
-      this.items[i].setVisibility(!this.inventory.isVisible() && this._visible);
-      if (this.items[i].getDistanceTo(this.player.x, this.player.y) < 60) {
+      this.items[i].setVisibility(!this.inventory.isVisible() &amp;&amp; this._visible);
+      if (this.items[i].getDistanceTo(this.player.x, this.player.y) &lt; 60) {
         if (this.inventory.addItem(this.items[i].item)) {
           this.items[i].destroy();
           toDelete.push(i);
@@ -479,3 +507,26 @@ const ITEMS = [
   new Item('Technical Box', 34, ['Motor', 'Computer']),
   new Item('Radio Transmitter', 18, ['Satellite Dish', 'Technical Box'])
 ]
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Barriers.html">Barriers</a></li><li><a href="CraftingSlot.html">CraftingSlot</a></li><li><a href="DroppedItem.html">DroppedItem</a></li><li><a href="DroppedItemHandler.html">DroppedItemHandler</a></li><li><a href="FloorManager.html">FloorManager</a></li><li><a href="Inventory.html">Inventory</a></li><li><a href="InventorySlot.html">InventorySlot</a></li><li><a href="Item.html">Item</a></li><li><a href="Player.html">Player</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Mon Aug 17 2020 18:45:57 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
