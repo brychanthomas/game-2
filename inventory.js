@@ -85,11 +85,9 @@ class InventorySlot {
   }
 }
 
-//special type of inventory slot that allows you to combine two items to make
-//a new item
-
 /**
- * Class representing a crafting slot that is placed in the Inventory window.
+ * Class representing a crafting slot that is placed in the Inventory window
+ * and allows you to combine two items into one.
  * @extends InventorySlot
  */
 class CraftingSlot extends InventorySlot {
@@ -124,7 +122,6 @@ class CraftingSlot extends InventorySlot {
     return inHand;
   }
 
-  //try to combine the item in the player's hand and the content of the slot
   /**
    * Tries to craft the item in the slot together with the item in the player's
    * hand by checking the recipe of every item in the ITEMS array. If an item is
@@ -148,7 +145,22 @@ class CraftingSlot extends InventorySlot {
 }
 
 //the inventory window
+/**
+ * Class representing the inventory window and the inventory slots it
+ * contains.
+ */
+
 class Inventory {
+
+  /**
+   * Create an inventory window - creates the background box and positions all
+   * of the slots. Everything is initially invisible.
+   *
+   * @param  {number}       rows    - The number of rows of slots in the inventory.
+   * @param  {number}       columns - The number of columns of slots in the inventory.
+   * @param  {Phaser.Scene} game    - The Scene the window should be created in.
+   * @constructor
+   */
   constructor(rows, columns, game) {
     this.imageObject = game.add.image(500, 300, 'inventoryBack');
     this.imageObject.visible = false;
@@ -172,17 +184,28 @@ class Inventory {
     this.slots.push(new CraftingSlot(800, 300, 'inventoryBox', game));
   }
 
-  //show/hide when E key is pressed
-  toggleVisibility(game) {
+  /**
+   * Toggles whether the inventory window and its slots are visible
+   * or not (generally called when 'e' is pressed).
+   */
+  toggleVisibility() {
     this.imageObject.visible = !this.imageObject.visible;
     this.imageObject.x = this.game.cameras.main.scrollX + this.baseX;
     this.imageObject.y = this.game.cameras.main.scrollY + this.baseY;
     for (let i=0; i < this.slots.length; i++) {
-      this.slots[i].toggleVisibility(game);
+      this.slots[i].toggleVisibility();
     }
   }
 
   //add an item to an empty inventory slot and return true if there was space
+
+  /**
+   * Adds an item to the first empty inventory slot if there are any empty
+   * slots.
+   *
+   * @param  {string} item - The name of the item to be added.
+   * @return {boolean}     - true is item was added successfully, false otherwise.
+   */
   addItem(item) {
     item = Item.nameToObject(item);
     for (let slot of this.slots) {
@@ -194,12 +217,26 @@ class Inventory {
     return false;
   }
 
-  //return whether or not the inventory window is visible
+  /**
+   * Check if the inventory window is visible.
+   *
+   * @return {boolean}  true if inventory is visible, false otherwise.
+   */
   isVisible() {
     return this.imageObject.visible;
   }
 
   //when mouse clicked
+
+  /**
+   * Called when mouse is clicked - checks each slot to see if mouse clicked
+   * within its boundary and, if it did, the item in the player's 'hand' is
+   * swapped with the item in that slot. The sprite showing the item in the
+   * player's grasp is updated the next time updateInHandImage() is called.
+   *
+   * @param  {number} x - The x coordinate the mouse clicked on.
+   * @param  {number} y - The y coordinate the mouse clicked on.
+   */
   mouseClick(x, y) {
     if (this.isVisible()) {
       let relX = x + this.game.cameras.main.scrollX;
@@ -210,8 +247,11 @@ class Inventory {
     }
   }
 
-  //update the visibility, frame number and position of the object being held
-  //by the mouse (create the sprite if it doesn't exist)
+  /**
+   * Update the visibility, spritesheet frame number and position of the
+   * sprite representing the object held by the mouse. If the sprite doesn't
+   * exist yet it is created.
+   */
   updateInHandImage() {
     if (this.inHandSprite === undefined) {
       this.inHandSprite = this.game.add.sprite(0, 0, 'assets');
@@ -236,8 +276,23 @@ class Inventory {
   }
 }
 
-//shows a dropped item, moves it up and down and calculates distance to player
+
+
+/**
+ * A class representing an item on the ground that can be picked up by the
+ * player.
+ */
 class DroppedItem {
+
+  /**
+   * Creates an item on the ground.
+   *
+   * @param  {object}       item - The object representation of the item on the floor.
+   * @param  {number}       x    - The x coordinate of the item.
+   * @param  {number}       y    - The y coordinate of the item.
+   * @param  {Phaser.Scene} game - The Scene the item should be created in.
+   * @constructor
+   */
   constructor(item, x, y, game) {
     this.x = x;
     this.y = y;
@@ -249,26 +304,46 @@ class DroppedItem {
     this.spriteObject.depth = 0; //send to back, behind other sprites
   }
 
-  //use the game clock to move it up and down in a sine wave pattern
-  updatePosition(playerX, playerY) {
+  /**
+   * Moves the item up/down a little each frame using the game clock
+   * and the sine function.
+   */
+  updatePosition() {
     let y = this.y + 4;
     y -= 8 *  Math.sin(this.game.time.now / 200);
     this.spriteObject.y = y;
   }
 
   //get distance between item and specified x and y
+
+  /**
+   * Calculate the distance between the item and the specified coordinates
+   * using Pythagoras.
+   *
+   * @param  {number} x - The x position to calculate the distance to.
+   * @param  {number} y - The y position to calculate the distance to.
+   * @return {number}     The distance between the item and the specified position.
+   */
   getDistanceTo(x, y) {
     let distanceToPlayer = (player.x - this.x)**2 + (player.y - this.y)**2;
     distanceToPlayer = Math.sqrt(distanceToPlayer);
     return distanceToPlayer;
   }
 
-  //show/hide item
+  /**
+   * Change whether the item is visible or not.
+   *
+   * @param  {boolean} visible - Whether the item should be visible or not.
+   */
   setVisibility(visible) {
     this.spriteObject.visible = visible;
   }
 
   //delete sprite of item
+
+  /**
+   * Delete the sprite of the item from the game.
+   */
   destroy() {
     this.spriteObject.destroy();
   }
