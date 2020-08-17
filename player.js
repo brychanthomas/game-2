@@ -1,5 +1,19 @@
-//object to represent player: handles sprite, movement and animations
+/**
+ * Object to represent player: handles the sprite, its movement
+ * and its animations.
+ */
 class Player {
+
+  /**
+   * Creates a sprite of the player and initialises the animations using
+   * _initialise_animations(),
+   *
+   * @param  {Phaser.Scene} game        - The Scene to add the player to.
+   * @param  {string}       spritesheet - The name of the loaded spritesheet.
+   * @param  {number}       x           - The initial x position of the player.
+   * @param  {number}       y           - The initial y position of the player.
+   * @constructor
+   */
   constructor (game, spritesheet, x, y) {
     this.sprite = game.matter.add.sprite(x, y, spritesheet);
     this.sprite.setScale(6);
@@ -9,7 +23,10 @@ class Player {
     this.disableMovement = false;
   }
 
-  //create all of the animations for the player
+
+  /**
+   * Adds all of the animations needed by the player to the game.
+   */
   _initialise_animations() {
     this.game.anims.create({
         key: 'down',
@@ -57,7 +74,12 @@ class Player {
     });
   }
 
-  //set the player sprite's x and y velocity
+  /**
+   * Sets the player's velocity.
+   *
+   * @param  {number} x - The x velocity.
+   * @param  {number} y - The y velocity.
+   */
   setVelocity(x, y) {
     this.sprite.setVelocityX(x);
     this.sprite.setVelocityY(y);
@@ -65,6 +87,13 @@ class Player {
 
   //change the size of the player's bounding box depending on which direction
   //they are facing
+
+  /**
+   * Changes the size of the bounding box around the player based
+   * on which direction they are facing.
+   *
+   * @param  {string} direction - The name of the direction ('side' or 'top')
+   */
   change_bounding_box(direction) {
     if (direction === 'side') {
       this.sprite.body.vertices[0].x = this.sprite.x - 20;
@@ -88,7 +117,18 @@ class Player {
   }
 
   //move and set animations
+
+  /**
+   * Updates the velocity, animations and bounding box of the
+   * player based on which keys are being pressed. If the
+   * 'disableMovement' property is true the player does
+   * not move and the stop() method is called instead.
+   *
+   * @param  {object} cursors - An object with properties 'w', 'a',
+   * 's' and 'd', each referring to Phaser.Key objects.
+   */
   update(cursors) {
+    console.log(cursors);
     if (!this.disableMovement) {
       if (cursors.a.isDown && this.x > 0) {
         this.setVelocity(-6, 0);
@@ -122,6 +162,12 @@ class Player {
   }
 
   //stop animations and movement
+
+  /**
+   * Stops the current animation with the player facing in the
+   * correct direction and sets the player's x and y velocity to 0.
+   *
+   */
   stop() {
     if(player.sprite.anims.currentAnim !== null) {
       if (player.sprite.anims.currentAnim.key.slice(-4) !== 'Stop') {
@@ -131,22 +177,52 @@ class Player {
     this.setVelocity(0,0);
   }
 
+
+  /**
+   * get x - Gets the player's x coordinate
+   *
+   * @return {number} - The x coordinate.
+   */
   get x() {
     return this.sprite.x;
   }
 
+  /**
+   * get x - Gets the player's y coordinate
+   *
+   * @return {number} - The y coordinate.
+   */
   get y() {
     return this.sprite.y;
   }
 
+
+  /**
+   * Sets the player's x coordinate.
+   *
+   * @param  {number} x - The new x coordinate.
+   */
   set x(x) {
     this.sprite.x = x;
   }
 
+  /**
+   * Sets the player's y coordinate.
+   *
+   * @param  {number} y - The new y coordinate.
+   */
   set y(y) {
     this.sprite.y = y;
   }
 
+
+  /**
+   * Stop the current animation and set the player to face a specific
+   * direction.
+   *
+   * @param  {string} dir - The direction to face, one of 'up', 'down',
+   * 'left' and 'right'.
+   */
   set direction(dir) {
     if (['up', 'down', 'left', 'right'].indexOf(dir) !== -1) {
       player.sprite.anims.play(dir+'Stop', true);
