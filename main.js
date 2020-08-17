@@ -96,8 +96,8 @@ var floorManager;
 function preload () {
 
   this.load.image('floor0', 'assets/missing.png');
-  this.load.image('floor1', 'assets/floor0.png');
-  this.load.image('floor2', 'assets/floor1.png');
+  this.load.image('floor1', 'assets/floor1.png');
+  this.load.image('floor2', 'assets/floor2.png');
   this.load.image('floor3', 'assets/missing.png');
   this.load.image('missing', 'assets/missing.png');
   this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
@@ -129,7 +129,7 @@ function create () {
   floorManager = new FloorManager(boundary_definitions, player, inventory, this);
 
   for (let i=0; i<8; i++) {
-    floorManager.addDroppedItem(ITEMS[i].name, 100+(i*100), 1750, 0);
+    floorManager.addDroppedItem(ITEMS[i].name, 100+(i*100), 1750, 1);
   }
 
   this.input.on('pointerdown', on_click, this);
