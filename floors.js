@@ -16,18 +16,18 @@ class FloorManager {
   constructor(boundary_defs, player, inventory, game) {
     this.game = game;
     this.player = player;
-    this.floor = 0;
-    this.floorImage = this.game.add.image(0, 0, 'floor0').setScale(14);
+    this.floor = 1;
+    this.floorImage = this.game.add.image(0, 0, 'floor1').setScale(14);
     this.floorImage.angle = 0;
     this.floorImage.x = this.floorImage.displayWidth/2;
     this.floorImage.y = this.floorImage.displayHeight/2;
     xLimit = this.floorImage.displayWidth;
     yLimit = this.floorImage.displayHeight;
     this.lastFloorChangeTime = 0;
-    this.barriers = new Barriers(game, boundary_defs[0]);
+    this.barriers = new Barriers(game, boundary_defs[this.floor]);
     this.boundaryDefinitions = boundary_defs;
     this.droppedItemHandlers = [];
-    for (var i=0; i<3; i++) {
+    for (var i=0; i<4; i++) {
       this.droppedItemHandlers.push(new DroppedItemHandler(player, inventory, game));
     }
   }
@@ -101,9 +101,9 @@ class FloorManager {
   /**
    * Adds an item to one of the floors.
    * @param {string} item - The name of the item to add.
-   * @param {number} x = The x coordinate of the item.
-   * @param {number} y = The y coordinate of the item.
-   * @param {number} floor = The floor to add the item on.
+   * @param {number} x - The x coordinate of the item.
+   * @param {number} y - The y coordinate of the item.
+   * @param {number} floor - The floor to add the item on.
    */
   addDroppedItem(item, x, y, floor) {
     this.droppedItemHandlers[floor].add(x, y, item);
