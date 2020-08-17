@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: floors.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: floors.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Class that manages changing the floor image, boundaries and items
+ * for the floor the player is on as well as allowing them to move
+ * up and down via stairs.
+ */
+class FloorManager {
+  /**
+   * Creates floor image, Barriers object and DroppedItemHandlers
+   * and sets everything up for floor 0.
+   * @param {Array} boundary_defs - Array of arrays of boundary definitions for each floor
+   * @param {Player} player - The Player object, needed for coordinates to check if on stairs
+   * @param {Inventory} inventory - The Inventory object, needed to create DroppedItemHandlers
+   * @param {Phaser.Scene} game - The Scene the player is in.
+   * @constructor
+   */
+  constructor(boundary_defs, player, inventory, game) {
+    this.game = game;
+    this.player = player;
+    this.floor = 0;
+    this.floorImage = this.game.add.image(0, 0, 'floor0').setScale(14);
+    this.floorImage.angle = 0;
+    this.floorImage.x = this.floorImage.displayWidth/2;
+    this.floorImage.y = this.floorImage.displayHeight/2;
+    xLimit = this.floorImage.displayWidth;
+    yLimit = this.floorImage.displayHeight;
+    this.lastFloorChangeTime = 0;
+    this.barriers = new Barriers(game, boundary_defs[0]);
+    this.boundaryDefinitions = boundary_defs;
+    this.droppedItemHandlers = [];
+    for (var i=0; i&lt;3; i++) {
+      this.droppedItemHandlers.push(new DroppedItemHandler(player, inventory, game));
+    }
+  }
+
+  /**
+   * Check if the player is in a stairway and move them up/down if
+   * they are.
+   */
+  update() {
+    var x = this.player.x;
+    var y = this.player.y + 60;
+    var upMainStairway = (x > 1670 &amp;&amp; x &lt; 1790) &amp;&amp; (y > 1280 &amp;&amp; y &lt; 1390);
+    var downMainStairway = (x > 1680 &amp;&amp; x &lt; 1780) &amp;&amp; (y > 1400 &amp;&amp; y &lt; 1500);
+    var upSecondStairway = (x > 3410 &amp;&amp; x &lt; 3520) &amp;&amp; (y > 1660 &amp;&amp; y &lt; 1840);
+    var downSecondStairway = (x > 3290 &amp;&amp; x &lt; 3400) &amp;&amp; (y > 1780 &amp;&amp; y &lt; 1850);
+    if (upMainStairway || upSecondStairway) {
+      this.changeFloor(+1);
+    } else if (downMainStairway || downSecondStairway) {
+      this.changeFloor(-1);
+    }
+    this.droppedItemHandlers[this.floor].update();
+  }
+
+  /**
+   * Move up or down a specific number of floors.
+   * @param {number} change - The number of floors to move (usually 1 or -1).
+   */
+  changeFloor(change) {
+    var timeSinceLastChange = this.game.time.now - this.lastFloorChangeTime;
+    if (this.floor+change >= 0 &amp;&amp; this.floor+change &lt;= 2 &amp;&amp; timeSinceLastChange > 1500) {
+      this.floor += change;
+      this.lastFloorChangeTime = this.game.time.now;
+      this.player.disableMovement = true;
+
+      this.game.cameras.main.fadeOut(200, 0, 0, 0);
+      this.game.cameras.main.once('camerafadeoutcomplete', function (camera) {
+
+        if (this.player.x &lt; 2750) {
+          this.player.x = 1540;
+          this.player.y = 1540;
+          this.player.direction = 'down';
+        } else {
+          this.player.x = 3150;
+          this.player.y = 1730;
+          this.player.direction = 'left';
+        }
+
+        this.loadFloor();
+
+        camera.fadeIn(1000, 0, 0, 0);
+        this.game.cameras.main.once('camerafadeincomplete', function (camera) {
+          this.player.disableMovement = false;
+        }, this);
+    }, this);
+  }
+
+  }
+
+  /**
+   * Load the current floor by replacing the barriers, setting the correct
+   * floor texture and making the correct dropped items visible.
+   */
+  loadFloor() {
+    this.barriers.removeBarriers();
+    this.barriers.addBarriers(this.boundaryDefinitions[this.floor]);
+    this.floorImage.setTexture('floor'+this.floor);
+    this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
+    this.droppedItemHandlers[this.floor].itemsVisible = true;
+  }
+
+  /**
+   * Adds an item to one of the floors.
+   * @param {string} item - The name of the item to add.
+   * @param {number} x = The x coordinate of the item.
+   * @param {number} y = The y coordinate of the item.
+   * @param {number} floor = The floor to add the item on.
+   */
+  addDroppedItem(item, x, y, floor) {
+    this.droppedItemHandlers[floor].add(x, y, item);
+    this.droppedItemHandlers.forEach((handler) => {handler.itemsVisible = false});
+    this.droppedItemHandlers[this.floor].itemsVisible = true;
+  }
+
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Barriers.html">Barriers</a></li><li><a href="CraftingSlot.html">CraftingSlot</a></li><li><a href="DroppedItem.html">DroppedItem</a></li><li><a href="DroppedItemHandler.html">DroppedItemHandler</a></li><li><a href="FloorManager.html">FloorManager</a></li><li><a href="Inventory.html">Inventory</a></li><li><a href="InventorySlot.html">InventorySlot</a></li><li><a href="Item.html">Item</a></li><li><a href="Player.html">Player</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Mon Aug 17 2020 18:45:57 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
