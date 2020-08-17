@@ -1,3 +1,17 @@
+/*
+Script used to create boundaries for the game.
+
+Press one of the number keys (>=2) to add a shape with
+that number of vertices. Drag the vertices around to fit the
+map shown beneath.
+
+Press the button to get a JSON representation
+of the boundaries that can be used by the game.
+
+The 'd' key can be pressed while holding a vertex to
+delete the shape.
+*/
+
 const SCALE = 14; //scale of image in game
 const DIVIDER = 7; //how many times smaller image should appear than game scale
 
@@ -24,7 +38,7 @@ class Region {
       vertex(this.vertices[i].x/DIVIDER, this.vertices[i].y/DIVIDER);
       circle(this.vertices[i].x/DIVIDER, this.vertices[i].y/DIVIDER, 3);
     }
-    vertex(this.vertices[0].x/DIVIDER, this.vertices[0].y/DIVIDER)
+    vertex(this.vertices[0].x/DIVIDER, this.vertices[0].y/DIVIDER);
     endShape();
   }
 
@@ -91,6 +105,10 @@ function keyPressed() {
     //add a new region with the number of sides
     shapes.push(new Region(mouseX, mouseY, Number(key)));
   }
+  if (key === 'd') {
+    shapes.splice(prevMovedShape, 1);
+    prevMovedShape = -1;
+  }
 }
 
 //called when mouse is held down to move shape vertices
@@ -107,7 +125,6 @@ function drag() {
   if (i > 0) {
     prevMovedShape = i-1;
   }
-  console.log(prevMovedShape)
 }
 
 function copyJSON() {
