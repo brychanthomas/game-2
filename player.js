@@ -17,6 +17,7 @@ class Player {
   constructor (game, spritesheet, x, y) {
     this.sprite = game.matter.add.sprite(x, y, spritesheet);
     this.sprite.setScale(6);
+    this.sprite.setFixedRotation();
     this.sprite.depth=1;
     this.game = game;
     this._initialise_animations();
@@ -157,7 +158,6 @@ class Player {
     } else {
       this.stop();
     }
-    this.sprite.setAngle(0);
   }
 
   //stop animations and movement
