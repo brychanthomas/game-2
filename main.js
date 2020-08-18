@@ -66,20 +66,30 @@ class Barriers {
 }
 
 class Door {
-  constructor(x, y, floor, key, inventory, game) {
+  constructor(x, y, floor, key, inventory, player, game) {
     this.floor = floor;
     this.x = x;
     this.y = y;
     this.key = key;
     this.inventory = inventory;
     this.game = game;
+    this.player = player;
   }
 
   update(floor) {
     if (this.floor == floor) {
       this._createSprite()
+      if (this.inventory.contains(this.key) && this._distanceTo(this.player.x, this.player.y) < 80) {
+        this.sprite.setAngle(90);
+        this.sprite.y = this.y + this.sprite.displayHeight/2 + 14;
+        this.sprite.x = this.x - this.sprite.displayHeight/2;
+      } else {
+        this.sprite.setAngle(0);
+        this.sprite.y = this.y;
+        this.sprite.x = this.x
+      }
     } else {
-      this._destroySprite()
+      this._destroySprite();
     }
   }
 
@@ -89,6 +99,10 @@ class Door {
       this.sprite.setScale(14);
       this.sprite.setStatic(true);
     }
+  }
+
+  _distanceTo(x, y) {
+    return Math.sqrt((x - this.x)**2 + (y - this.y)**2);
   }
 
   _destroySprite() {
@@ -176,7 +190,7 @@ function create () {
     this.cameras.main.shake(2000);
   }.bind(this));
 
-  dtDoor = new Door(1442, 1757, 0, "Father Wayne's key", inventory, this);
+  dtDoor = new Door(1442, 1757, 0, "Father Wayne's key", inventory, player, this);
 
 }
 
