@@ -274,6 +274,24 @@ class Inventory {
       this.inHandText.visible = false;
     }
   }
+
+
+  /**
+   * Checks whether a specific item is in the inventory.
+   *
+   * @param  {string} item - The name of the item
+   * @return {boolean}     - Whether the item is in the inventory or not
+   */
+  contains(item) {
+    for (let slot of this.slots) {
+      if(slot.contents) {
+        if (slot.contents.name === item) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
 
 
