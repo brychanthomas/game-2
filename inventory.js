@@ -259,6 +259,7 @@ class Inventory {
       this.inHandSprite.depth = 5;
       this.inHandText = this.game.add.text(0, 0, 'Henlo', {fontSize: '15px', fontFamily: 'Arial'});
       this.inHandText.setColor('black');
+      this.inHandText.depth = 5;
     }
     if (this.inHand !== null && this.inHand !== undefined) {
       this.inHandSprite.frame = this.inHandSprite.frame.texture.frames[this.inHand.frameNumber]
