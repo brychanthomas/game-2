@@ -65,6 +65,40 @@ class Barriers {
   }
 }
 
+class Door {
+  constructor(x, y, floor, key, inventory, game) {
+    this.floor = floor;
+    this.x = x;
+    this.y = y;
+    this.key = key;
+    this.inventory = inventory;
+    this.game = game;
+  }
+
+  update(floor) {
+    if (this.floor == floor) {
+      this._createSprite()
+    } else {
+      this._destroySprite()
+    }
+  }
+
+  _createSprite() {
+    if (!this.sprite) {
+      this.sprite = this.game.matter.add.sprite(this.x, this.y, 'door');
+      this.sprite.setScale(14);
+      this.sprite.setStatic(true);
+    }
+  }
+
+  _destroySprite() {
+    if (this.sprite) {
+      this.sprite.destroy();
+      this.sprite = null;
+    }
+  }
+}
+
 var config = {
   type: Phaser.WebGL,
   width: 1000,
@@ -103,9 +137,12 @@ function preload () {
   this.load.spritesheet('assets', 'assets/spritesheet-2.png', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
+  this.load.image('door', 'assets/door.png');
 }
 
 var xLimit, yLimit;
+
+var dtDoor;
 
 function create () {
 
@@ -139,6 +176,8 @@ function create () {
     this.cameras.main.shake(2000);
   }.bind(this));
 
+  dtDoor = new Door(1442, 1757, 0, "Father Wayne's key", inventory, this);
+
 }
 
 function update () {
@@ -158,6 +197,9 @@ function update () {
   // } else {
   //   this.cameras.main.setBounds(2580, 0, xLimit-2580, yLimit);
   // }
+  if (this.time.now - floorManager.lastFloorChangeTime > 300) {
+    dtDoor.update(floorManager.floor);
+  }
 }
 
 //on mouse click for inventory management
