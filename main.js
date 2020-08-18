@@ -95,7 +95,7 @@ var floorManager;
 
 function preload () {
 
-  this.load.image('floor0', 'assets/missing.png');
+  this.load.image('floor0', 'assets/floor0.png');
   this.load.image('floor1', 'assets/floor1.png');
   this.load.image('floor2', 'assets/floor2.png');
   this.load.image('floor3', 'assets/missing.png');

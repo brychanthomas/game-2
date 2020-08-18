@@ -57,7 +57,7 @@ class FloorManager {
    */
   changeFloor(change) {
     var timeSinceLastChange = this.game.time.now - this.lastFloorChangeTime;
-    if (this.floor+change >= 0 && this.floor+change <= 2 && timeSinceLastChange > 1500) {
+    if (this.floor+change >= 0 && this.floor+change <= 3 && timeSinceLastChange > 1500) {
       this.floor += change;
       this.lastFloorChangeTime = this.game.time.now;
       this.player.disableMovement = true;
