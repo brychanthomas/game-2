@@ -65,7 +65,25 @@ class Barriers {
   }
 }
 
+
+/**
+ * Class to create a door that can be opened if a specific
+ * item is in the player's inventory.
+ */
 class Door {
+
+  /**
+   * Creates a closed door at a specific location on a specific floor
+   *
+   * @param  {number}       x         - The x coordinate of the door.
+   * @param  {number}       y         - The y coordinate of the door.
+   * @param  {number}       floor     - The floor to create the door on.
+   * @param  {string}       key       - The name of the item that should open the door.
+   * @param  {Inventory}    inventory - The player's inventory, used to check if they have the key item.
+   * @param  {Player}       player    - The Player object, used to check if they are near the door.
+   * @param  {Phaser.Scene} game      - The Scene to create the door in.
+   * @constructor
+   */
   constructor(x, y, floor, key, inventory, player, game) {
     this.floor = floor;
     this.x = x;
@@ -76,6 +94,14 @@ class Door {
     this.player = player;
   }
 
+
+  /**
+   * Called every frame to create/destroy the door sprite based on which
+   * floor the player is on and open the door if they are close with the
+   * correct key item.
+   *
+   * @param  {type} floor - The floor the player is currently on.
+   */
   update(floor) {
     if (this.floor == floor) {
       this._createSprite()
@@ -93,6 +119,11 @@ class Door {
     }
   }
 
+
+  /**
+   * Create the door sprite if it doesn't already exist, called when player is
+   * on the same floor.
+   */
   _createSprite() {
     if (!this.sprite) {
       this.sprite = this.game.matter.add.sprite(this.x, this.y, 'door');
@@ -101,10 +132,25 @@ class Door {
     }
   }
 
+
+  /**
+   * Calculate the distance between the door and a specific x and y
+   * coordinate using Pythagoras. Used to check if the player is
+   * nearby.
+   *
+   * @param  {number} x - The x coordinate to calculate the distance to.
+   * @param  {number} y - The x coordinate to calculate the distance to.
+   * @return {number}     The distance between the door and the coordinates.
+   */
   _distanceTo(x, y) {
     return Math.sqrt((x - this.x)**2 + (y - this.y)**2);
   }
 
+
+  /**
+   * Destroy the door sprite if it exists. Called when the player is
+   * on a different floor to the door.
+   */
   _destroySprite() {
     if (this.sprite) {
       this.sprite.destroy();
