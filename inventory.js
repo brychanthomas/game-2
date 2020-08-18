@@ -427,8 +427,7 @@ class DroppedItemHandler {
  * spritesheet and its recipe.
  */
 class Item {
-  //convert the name of an item to its object representation
-  //
+
   /**
    * @static
    * Takes the name of an item and converts it to its object representation or, if
@@ -477,5 +476,6 @@ const ITEMS = [
   new Item('Computer', 31, ['TV', 'Calculator']),
   new Item('Satellite Dish', 33, ['Dish', 'Rotator Thing']),
   new Item('Technical Box', 34, ['Motor', 'Computer']),
-  new Item('Radio Transmitter', 18, ['Satellite Dish', 'Technical Box'])
+  new Item('Radio Transmitter', 18, ['Satellite Dish', 'Technical Box']),
+  new Item("Father Wayne's key", 36, [])
 ]

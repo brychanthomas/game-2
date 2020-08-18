@@ -100,7 +100,7 @@ function preload () {
   this.load.image('floor2', 'assets/floor2.png');
   this.load.image('floor3', 'assets/missing.png');
   this.load.image('missing', 'assets/missing.png');
-  this.load.spritesheet('assets', 'assets/spritesheet_invisible.png?v=2', {frameWidth: 22, frameHeight: 22});
+  this.load.spritesheet('assets', 'assets/spritesheet-2.png', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
 }
@@ -127,6 +127,7 @@ function create () {
 
   inventory = new Inventory(4, 6, this);
   floorManager = new FloorManager(boundary_definitions, player, inventory, this);
+  floorManager.addDroppedItem("Father Wayne's key", 1500, 2200, 1);
 
   for (let i=0; i<8; i++) {
     floorManager.addDroppedItem(ITEMS[i].name, 100+(i*100), 1750, 1);
