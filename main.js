@@ -167,7 +167,7 @@ var config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: true,
+      debug: false,
       gravity: {x:0, y:0}
     }
   },
@@ -226,9 +226,15 @@ function create () {
   floorManager = new FloorManager(boundary_definitions, player, inventory, this);
   floorManager.addDroppedItem("Father Wayne's key", 1500, 2200, 1);
 
-  for (let i=0; i<8; i++) {
-    floorManager.addDroppedItem(ITEMS[i].name, 100+(i*100), 1750, 1);
-  }
+
+  floorManager.addDroppedItem('Bin Lid', 3390, 2150, 1); //Kitchen
+  floorManager.addDroppedItem('Flute', 590, 2340, 1); //Reception
+  floorManager.addDroppedItem('Security Camera', 1960, 1540, 3); //Locker room
+  floorManager.addDroppedItem('Record Player', 330, 2150, 2); //Mrs. Macmullan's room
+  floorManager.addDroppedItem('Battery', 2630, 2200, 1); //Mr. Ivins' room
+  floorManager.addDroppedItem('Wires', 2930, 4630, 2); //Mrs. Dinsmore's room
+  floorManager.addDroppedItem('TV', 3390, 2360, 2); //Staff room
+  floorManager.addDroppedItem('Calculator', 2860, 1505, 3); //Mr. George's office
 
   this.input.on('pointerdown', on_click, this);
 
