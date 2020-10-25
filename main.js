@@ -192,7 +192,7 @@ function preload () {
   this.load.image('floor0', 'assets/floor0.png');
   this.load.image('floor1', 'assets/floor1.png');
   this.load.image('floor2', 'assets/floor2.png');
-  this.load.image('floor3', 'assets/missing.png');
+  this.load.image('floor3', 'assets/floor3.png?v=2');
   this.load.image('missing', 'assets/missing.png');
   this.load.spritesheet('assets', 'assets/spritesheet-2.png', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');

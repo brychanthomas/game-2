@@ -76,7 +76,7 @@ for (var i=0; i<boundariesToLoad.length; i++) {
 }
 
 function preload() {
-  img = loadImage('../floor0.png');
+  img = loadImage('../floor3.png');
 }
 
 var copyButton;
