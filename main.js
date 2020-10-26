@@ -185,7 +185,7 @@ var inventory;
 var wasdKeys;
 var droppedHandler;
 var floorManager;
-
+var gameEnded = false;
 
 function preload () {
 
@@ -236,6 +236,8 @@ function create () {
   floorManager.addDroppedItem('TV', 3390, 2360, 2); //Staff room
   floorManager.addDroppedItem('Calculator', 2860, 1505, 3); //Mr. George's office
 
+  floorManager.addDroppedItem('Radio Transmitter', 1400, 2000, 1);
+
   this.input.on('pointerdown', on_click, this);
 
   this.input.keyboard.on('keydown_C', function (event) {
@@ -266,9 +268,27 @@ function update () {
   if (this.time.now - floorManager.lastFloorChangeTime > 300) {
     dtDoor.update(floorManager.floor);
   }
+
+  if (inventory.contains('Radio Transmitter') && !gameEnded) {
+    end_game(this);
+  }
 }
 
 //on mouse click for inventory management
 function on_click(pointer) {
   inventory.mouseClick(pointer.x, pointer.y);
+}
+
+//fades out the game when radio transmitter is created
+function end_game(scene) {
+  gameEnded = true;
+  scene.time.addEvent({
+    delay: 3000,
+    loop: false,
+    callback: function() {this.cameras.main.fadeOut(4000, 255, 255, 255)},
+    callbackScope: scene
+  });
+  scene.cameras.main.once('camerafadeoutcomplete', function (camera) {
+    //camera.fadeIn(6000, 255, 255, 255);
+  }, scene);
 }
