@@ -161,9 +161,14 @@ class Door {
 
 var config = {
   type: Phaser.WebGL,
-  width: 1000,
-  height: 600,
   pixelArt: true,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 1000,
+    height: 600,
+    parent: 'phaser-div',
+  },
   physics: {
     default: 'matter',
     matter: {
