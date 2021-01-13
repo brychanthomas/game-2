@@ -229,7 +229,7 @@ function create () {
 
   inventory = new Inventory(4, 6, this);
   floorManager = new FloorManager(boundary_definitions, player, inventory, this);
-  floorManager.addDroppedItem("Father Wayne's key", 1500, 2200, 1);
+  floorManager.addDroppedItem("Father Wayne's key", 1700, 1600, 0);
 
 
   floorManager.addDroppedItem('Bin Lid', 3390, 2150, 1); //Kitchen
@@ -241,7 +241,7 @@ function create () {
   floorManager.addDroppedItem('TV', 3390, 2360, 2); //Staff room
   floorManager.addDroppedItem('Calculator', 2860, 1505, 3); //Mr. George's office
 
-  floorManager.addDroppedItem('Radio Transmitter', 1400, 2000, 1);
+  floorManager.addDroppedItem('Radio Transmitter', 1100, 1600, 0);
 
   this.input.on('pointerdown', on_click, this);
 
