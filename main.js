@@ -264,7 +264,7 @@ function update () {
   }
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
-  floorManager.update();
+  floorManager.update(gameEnded);
   // if (player.x < 2750) {
   //   this.cameras.main.setBounds(0, 1220, xLimit, 1240);
   // } else {
