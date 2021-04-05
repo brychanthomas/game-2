@@ -7,3 +7,5 @@ search the school and find items that you can combine together to produce other
 items, eventually leading to the creation of a radio transmitter.
 
 The game was created using the Phaser 3 JavaScript game framework.
+
+Try it out [here](https://brychanthomas.github.io/game-2/). You can use WASD to move and E for inventory (and C for earthquake).
