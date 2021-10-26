@@ -16,7 +16,8 @@ class Npc {
     this.sprite = scene.add.sprite(x, y, 'assets');
     this.sprite.setScale(6)
     this.sprite.anims.play(this.name, true);
-    this.floor = floor;
+    this._floor = floor;
+    this.visible = true;
   }
 
   _createAnimation(frames, scene) {
@@ -34,6 +35,14 @@ class Npc {
 
   get y() {
     return this.sprite.y;
+  }
+
+  get floor() {
+    return this.floor;
+  }
+
+  set visible(visible) {
+    this.sprite.visible = visible;
   }
 }
 
