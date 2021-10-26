@@ -2,7 +2,7 @@
 
 from PIL import Image
 
-img = Image.open('spritesheet.png')
+img = Image.open('spritesheet-2.png')
 img = img.convert("RGBA")
 datas = img.getdata()
 
