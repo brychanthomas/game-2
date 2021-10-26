@@ -17,7 +17,6 @@ class Npc {
     this.sprite.setScale(6)
     this.sprite.anims.play(this.name, true);
     this._floor = floor;
-    this.visible = true;
   }
 
   _createAnimation(frames, scene) {
@@ -38,7 +37,7 @@ class Npc {
   }
 
   get floor() {
-    return this.floor;
+    return this._floor;
   }
 
   set visible(visible) {
@@ -47,5 +46,19 @@ class Npc {
 }
 
 class NpcManager {
+  constructor(scene) {
+    this.npcs = [
+      new Npc("Mr. Ivins", [], 1300, 2100, 1, {start:37, end:38}, scene)
+    ]
+  }
 
+  update(floor) {
+    this.npcs.forEach((npc) => {
+      if (npc.floor != floor) {
+        npc.visible = false;
+      } else {
+        npc.visible = true;
+      }
+    });
+  }
 }

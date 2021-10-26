@@ -190,6 +190,7 @@ var inventory;
 var wasdKeys;
 var droppedHandler;
 var floorManager;
+var npcManager;
 var gameEnded = false;
 
 function preload () {
@@ -199,7 +200,7 @@ function preload () {
   this.load.image('floor2', 'assets/floor2.png');
   this.load.image('floor3', 'assets/floor3.png?v=2');
   this.load.image('missing', 'assets/missing.png');
-  this.load.spritesheet('assets', 'assets/spritesheet-2.png', {frameWidth: 22, frameHeight: 22});
+  this.load.spritesheet('assets', 'assets/spritesheet_invisible.png', {frameWidth: 22, frameHeight: 22});
   this.load.image('inventoryBack', 'assets/inventoryBack.png');
   this.load.image('inventoryBox', 'assets/inventoryBox.png');
   this.load.image('door', 'assets/door.png');
@@ -251,6 +252,7 @@ function create () {
 
   dtDoor = new Door(1442, 1757, 0, "Father Wayne's key", inventory, player, this);
 
+  npcManager = new NpcManager(this);
 }
 
 function update () {
@@ -265,6 +267,7 @@ function update () {
   this.cameras.main.pan(player.x, player.y, 0);
   inventory.updateInHandImage();
   floorManager.update(gameEnded);
+  npcManager.update(floorManager.floor);
   // if (player.x < 2750) {
   //   this.cameras.main.setBounds(0, 1220, xLimit, 1240);
   // } else {
