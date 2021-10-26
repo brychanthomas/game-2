@@ -284,7 +284,11 @@ function update () {
 
 //on mouse click for inventory management
 function on_click(pointer) {
-  inventory.mouseClick(pointer.x, pointer.y);
+  if (inventory.isVisible()) {
+    inventory.mouseClick(pointer.x, pointer.y);
+  } else {
+    npcManager.click(pointer.x, pointer.y);
+  }
 }
 
 //fades out the game when radio transmitter is created
